@@ -32,6 +32,14 @@ const GET_USERS = gql`
   }
 `;
 
-export default {GET_PROJECTS, GET_USERS}
+const GET_USER = gql`
+  query GetUser($query: UserQueryInput!){
+    user(query: $query){
+       _id
+    }
+  }
+`;
+
+export default {GET_PROJECTS, GET_USERS, GET_USER}
 
 

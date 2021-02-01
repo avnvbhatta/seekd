@@ -1,15 +1,34 @@
 import React from 'react';
 import { useQuery } from "@apollo/client";
 import queries from "../../graphql/queries";
+import config from "../../graphql/config"
 
 const Home = () => {
     const { loading, data, error } = useQuery(queries.GET_USERS);
 
     console.log(data)
       
-    if (loading) return <p>Loading</p>;
-    if (error) return <p>ERROR{console.log(error)}</p>;
-    if (!data) return <p>Not found</p>;
+  
+
+    const register = async () => {
+      const email = "avnvbhatta@gmail.com";
+      const password = "Pa55w0rd";
+      try {
+        const res = await config.app.emailPasswordAuth.registerUser(email,password);
+        console.log(res);
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    const logOut = async() => {
+      try {
+        const res = await config.app.currentUser.logOut();
+        console.log(res);
+      } catch (error) {
+        console.log(error)
+      }
+    }
       
     return ( 
         <div>
@@ -21,6 +40,9 @@ const Home = () => {
                 })}
               </>
             }
+
+            <button onClick={() => register()}>Click to register</button>
+            <button onClick={() => logOut()}>Click to logout</button>
           
         </div>
      );
