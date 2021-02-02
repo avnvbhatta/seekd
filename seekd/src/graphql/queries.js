@@ -35,7 +35,8 @@ const GET_USERS = gql`
 const GET_USER = gql`
   query GetUser($query: UserQueryInput!){
     user(query: $query){
-       _id
+       _id,
+       name
     }
   }
 `;
