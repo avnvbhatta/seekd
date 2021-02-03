@@ -71,6 +71,7 @@ const Home = () => {
     return ( 
         <div>
             This is homesss
+            <p className="bg-blue-500 text-3xl">Testing tailwind</p>
             {/* {loading ? <div>Loading...</div> :
               <>
                 { data && data.users.map((user,idx) => {

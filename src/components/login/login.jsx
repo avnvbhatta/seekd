@@ -5,120 +5,148 @@ import mutations from "../../graphql/mutations";
 import queries from "../../graphql/queries";
 import * as Realm from "realm-web";
 import { useRealmApp } from "../../RealmApp"
-import validator from "validator";
+import { TextInput } from '../../ui/TextInput';
+import { Formik, Form, useField } from 'formik';
+import * as Yup from "yup";
+import Alert from '../../ui/Alert';
 
 const Login = () => {
 
     const app = useRealmApp();
-    // Toggle between logging users in and registering new users
-    const [mode, setMode] = useState("login");
-    const toggleMode = () => {
-        setMode((oldMode) => (oldMode === "login" ? "register" : "login"));
-    };
-
-    // Keep track of form input state
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    // Keep track of input validation/errors
+    const [mode, setMode] = useState('login');
     const [error, setError] = useState({});
-    // Whenever the // Whenever the mode changes, clear the form inputs
-    useEffect(() => {
-        setEmail("");
-        setPassword("");
-        setError({});
-    }, [mode]); 
-
-    const [isLoggingIn, setIsLoggingIn] = React.useState(false);
-
-    const handleLogin = async () => {
-        setIsLoggingIn(true);
-        setError((e) => ({ ...e, password: null }));
+    const handleLogin = async (email, password) => {
         try {
-            const res = await app.logIn(Realm.Credentials.emailPassword(email, password));
+            await app.logIn(Realm.Credentials.emailPassword(email, password));
         } catch (err) {
             handleAuthenticationError(err, setError);
         }
     };
+    
 
-    const handleRegistrationAndLogin = async () => {
-        const isValidEmailAddress = validator.isEmail(email);
-        setError((e) => ({ ...e, password: null }));
-        if (isValidEmailAddress) {
+    const handleRegistrationAndLogin = async (email, password) => {
+        // if (isValidEmailAddress) {
+        // try {
+        //     // Register the user and, if successful, log them in
+        //     // await app.emailPasswordAuth.registerUser(email, password);
+        //     return await handleLogin();
+        // } catch (err) {
+        //     // handleAuthenticationError(err, setError);
+        // }
+        // } else {
+        //   // setError((err) => ({ ...err, email: "Email is invalid." }));
+        // }
         try {
-            // Register the user and, if successful, log them in
+          console.log(email, password)
             await app.emailPasswordAuth.registerUser(email, password);
             return await handleLogin();
-        } catch (err) {
-            handleAuthenticationError(err, setError);
-        }
-        } else {
-        setError((err) => ({ ...err, email: "Email is invalid." }));
+        } catch (error) {
+            console.log((err) => ({ ...err, email: "Email is invalid." }))
         }
     };
 
     return ( 
-        <div>
-            <h1>Login</h1>
-            <input
-              type="email"
-              label="Email"
-              placeholder="your.email@example.com"
-              onChange={(e) => {
-                setError((e) => ({ ...e, email: null }));
-                setEmail(e.target.value);
-              }}
-              value={email}
-              state={
-                error.email
-                  ? "error"
-                  : validator.isEmail(email)
-                  ? "valid"
-                  : "none"
-              }
-              errorMessage={error.email}
-            />
+        <>
+          <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+            <div className="sm:mx-auto sm:w-full sm:max-w-md">
+              <img className="mx-auto h-12 w-auto" src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg" alt="Workflow"/>
+              <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+                 {mode === 'login' ? 'Sign in to your account' : 'Sign up for an account'}
+              </h2>
+            </div>
 
-            <input
-              type="password"
-              label="Password"
-              placeholder="pa55w0rd"
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
-              value={password}
-              state={
-                error.password ? "error" : error.password ? "valid" : "none"
-              }
-              errorMessage={error.password}
-            />
+            <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+              <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+                <Formik
+                  initialValues= {
+                    {
+                      email: '',
+                      password: ''
+                    }
+                  }
+                  validationSchema = {
+                    Yup.object({
+                        email: Yup.string()
+                          .email('Invalid email address')
+                          .required('Required'),
+                        password: Yup.string()
+                          .min(6, 'Password must be at least 6 characters')
+                          .max(20, 'Password cannot exceed 20 characters')
+                          .required('Required')
+                      },
+                    )
+                  }
+                  onSubmit={(values, { setSubmitting }) => {
+                    const { email, password } = values;
+                    if(mode === 'login'){
+                      handleLogin(email, password);
+                    }
+                    else if(mode === 'signup'){
+                      handleRegistrationAndLogin(email, password);
+                    }
+                    setSubmitting(false);
+                  }}
+                  validateOnChange
+                >
+                  {formik => (
+                    <Form>
+                      <div className="space-y-6">
+                        <TextInput 
+                          id="email"
+                          label="Email address"
+                          name="email"
+                          type="email"
+                          setError={setError}
+                        />
+                        <TextInput 
+                          id="password"
+                          label="Password"
+                          name="password"
+                          type="password"
+                          setError={setError}
+                        />
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center">
+                            <input id="remember_me" name="remember_me" type="checkbox" className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"/>
+                            <label htmlFor="remember_me" className="ml-2 block text-sm text-gray-900">
+                              Remember me
+                            </label>
+                          </div>
 
-            {mode === "login" ? (
-              <button  onClick={() => handleLogin()}>
-                Log In
-              </button>
-            ) : (
-              <button
-                onClick={() => handleRegistrationAndLogin()}
-              >
-                Register
-              </button>
-            )}
-            
-            <p>
-              {mode === "login"
-                ? "Don't have an account?"
-                : "Already have an account?"}
-              </p>
-              <div
-                onClick={(e) => {
-                  e.preventDefault();
-                  toggleMode();
-                }}
-              >
-                {mode === "login" ? "Register one now." : "Log in instead."}
+                          <div className="text-sm">
+                            <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
+                              Forgot your password?
+                            </a>
+                          </div>
+                        </div>
+
+                        <div>
+                          <button type="submit" className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            {formik.isSubmitting ? 'Loading' : `${mode === 'login' ? 'Sign in' : 'Sign up' }`}
+                          </button>
+                        </div>
+                        <div className="flex justify-center" onClick={() => mode === 'login' ? setMode('signup') : setMode('login') }>
+                              <p>{mode === 'login' ? 'Dont have an account? ' : 'Already have an account?' }</p>
+                              <p className="cursor-pointer font-medium text-indigo-600 pl-1">{mode === 'login' ? 'Sign up' : 'Sign in' }</p>
+                        </div>
+                        
+                        {error.password || error.email ? 
+                        
+                          <Alert 
+                            type="error"
+                            message={error.password || error.email}
+                            hide={() => setError({})}
+                          />
+                        
+                        : null}
+                      </div>
+                    </Form>
+                  )}
+                </Formik>
               </div>
-
-        </div>
+            </div>
+          </div>
+        </>
      );
 }
  
