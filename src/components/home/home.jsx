@@ -23,7 +23,6 @@ const Home = () => {
             const _createUser = async () => {
             const newUser = {
                 _id: id,
-                name: '',
                 email: email
             }
             console.log('newuser', newUser)

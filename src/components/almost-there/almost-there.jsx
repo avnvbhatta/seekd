@@ -3,10 +3,16 @@ import { useRealmApp } from "../../RealmApp"
 import { Formik, Form, useField } from 'formik';
 import * as Yup from "yup";
 import S3 from 'aws-s3';
+import {countryList} from "../../constants"
+import LoadingSpinner from '../loadingspinner';
+import Home from "../home/home"
+import Alert from '../../ui/Alert';
+import mutations from "../../graphql/mutations";
+import { useMutation } from '@apollo/client';
+
 
 const AlmostThere = () => {
     const app = useRealmApp();
-    const [error, setError] = useState({});
     const URL = /^((https?|ftp):\/\/)?(www.)?(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i
 
     const config = {
@@ -26,6 +32,12 @@ const AlmostThere = () => {
     const [imgError, setImgError] = useState(false);
     const [tempCoverPic, setTempCoverPic] = useState(null);
     const [coverImgError, setCoverImgError] = useState(false);
+
+    const [createUserProfile] = useMutation(mutations.CREATE_USER_PROFILE);
+
+
+    const [success, setSuccess] = useState(false);
+    const [error, setError] = useState(false);
 
     const handleImageUpload = (e, imgType) => {
 
@@ -139,9 +151,7 @@ const AlmostThere = () => {
                             className={`max-w-lg block w-full shadow-sm  sm:max-w-xs sm:text-sm rounded-md  
                             ${meta.touched && meta.error ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500' } `}>
                                 <option value="">Select a country</option>
-                                <option value="us">United States</option>
-                                <option value="canada">Canada</option>
-                                <option value="mexico">Mexico</option>
+                                {countryList.map((country,idx) => <option key={idx} value={country}>{country}</option>)}
                         </select>
                         <div className="text-sm text-red-500 mt-1">{meta.error}</div>
                     </div>
@@ -258,123 +268,154 @@ const AlmostThere = () => {
           console.log(error)
         }
       }
+
+    if(success){
+        return <Home />
+    }
     return ( 
         <>
-        <div className="flex bg-gray-50 flex-row justify-end">
-            <button onClick={() => logOut()}>Log out</button>
-        </div>
-        <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-            <div className="mt-8 mx-auto w-full max-w-2xl">
-              <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-            <Formik
-                  initialValues= {
-                    {
-                      name: '',
-                      city: '',
-                      country: '',
-                      img_url: '',
-                      cover_url: '',
-                      bio: '',
-                      employer: '',
-                      skills: '',
-                      website: '',
-                      linkedin: '',
-                      twitter: '',
-                      instagram: '',
-                      facebook: ''
-                    }
-                  }
-                  validationSchema = {
-                      
-                    Yup.object({
-                        name: Yup.string()
-                            .min(1, 'Name must be at least 1 character')
-                            .max(64, 'Name cannot exceed 64 characters')
-                            .required('Required'),
-                        city: Yup.string()
-                            .min(1, 'City must be at least 1 character')
-                            .max(96, 'City cannot exceed 96 characters')
-                            .required('Required'),
-                        country: Yup.string()
-                            .oneOf(
-                            ['us', 'canada', 'mexico'],
-                            'Invalid Country'
-                            )
-                            .required('Required'),
-                        employer: Yup.string()
-                            .min(1, 'Employer must be at least 1 character')
-                            .max(96, 'Employer cannot exceed 96 characters'),
-                        bio: Yup.string()
-                            .max(300, 'Bio cannot exceed 300 characters')
-                            .required('Required'),
-                        technologies: Yup.string()
-                            .max(300, 'Technologies cannot exceed 300 characters'),
-                        website: Yup.string().matches(URL, 'Invalid URL'),
-                        facebook: Yup.string().matches(URL, 'Invalid URL'),
-                        twitter: Yup.string().matches(URL, 'Invalid URL'),
-                        instagram: Yup.string().matches(URL, 'Invalid URL'),
-                        linkedin: Yup.string().matches(URL, 'Invalid URL'),
-                      },
-                    )
-                  }
-                  onSubmit={async (values, { setSubmitting }) => {
-                   //todo
-                    console.log(values);
-                    const profilePicResponse = await uploadProfilePicToS3(profilePic, 'profile');
-                    const coverPicResponse = await uploadProfilePicToS3(coverPic, 'cover');
-                    
-                    const formData = {...values, img_url: profilePicResponse.location, cover_url: coverPicResponse.location}
-                    console.log(formData);
+            <div className="min-h-screen bg-gray-50 flex flex-col pb-12 sm:px-6 lg:px-8 relative">
+                <button type="button" onClick={() => logOut()} className="absolute inset y-0 right-0 cursor-pointer inline-flex items-center px-4 py-2 m-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    Sign Out
+                </button>
+                <div className="mt-8 mx-auto w-full max-w-2xl">
+                    <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+                        <Formik
+                            initialValues= {
+                                {
+                                name: '',
+                                city: '',
+                                country: '',
+                                img_url: '',
+                                cover_url: '',
+                                bio: '',
+                                employer: '',
+                                technologies: '',
+                                website: '',
+                                linkedin: '',
+                                twitter: '',
+                                instagram: '',
+                                facebook: ''
+                                }
+                            }
+                            validateOnChange
+                            validationSchema = {
+                                
+                                Yup.object({
+                                    name: Yup.string()
+                                        .min(1, 'Name must be at least 1 character')
+                                        .max(64, 'Name cannot exceed 64 characters')
+                                        .required('Required'),
+                                    city: Yup.string()
+                                        .min(1, 'City must be at least 1 character')
+                                        .max(96, 'City cannot exceed 96 characters')
+                                        .required('Required'),
+                                    country: Yup.string()
+                                        .oneOf(
+                                        countryList,
+                                        'Invalid Country'
+                                        )
+                                        .required('Required'),
+                                    employer: Yup.string()
+                                        .min(1, 'Employer must be at least 1 character')
+                                        .max(96, 'Employer cannot exceed 96 characters'),
+                                    bio: Yup.string()
+                                        .max(300, 'Bio cannot exceed 300 characters')
+                                        .required('Required'),
+                                    technologies: Yup.string()
+                                        .max(300, 'Technologies cannot exceed 300 characters'),
+                                    website: Yup.string().matches(URL, 'Invalid URL'),
+                                    facebook: Yup.string().matches(URL, 'Invalid URL'),
+                                    twitter: Yup.string().matches(URL, 'Invalid URL'),
+                                    instagram: Yup.string().matches(URL, 'Invalid URL'),
+                                    linkedin: Yup.string().matches(URL, 'Invalid URL'),
+                                },
+                                )
+                            }
+                            onSubmit={async (values, { setSubmitting }) => {
+                            //todo
+                                let formData = {...values}
+                                try {
+                                    if(profilePic){
+                                        const profilePicResponse = await uploadProfilePicToS3(profilePic, 'profile');
+                                        formData = {...formData, img_url: profilePicResponse.location}
+                                    }
+                                    if(coverPic){
+                                        const coverPicResponse = await uploadProfilePicToS3(coverPic, 'cover');
+                                        formData = {...formData, cover_url: coverPicResponse.location}
+                                    }
 
-                  }}
-                  
-                >
-                  {formik => (
-                    <Form>
-                        <div className="space-y-8 ">
-                        <div className="space-y-8 divide-y divide-gray-200 sm:space-y-5">
-                            <div>
-                                <h3 className="text-lg leading-6 font-medium text-gray-900">
-                                Almost There!
-                                </h3>
-                                <p className="mt-1 max-w-2xl text-sm text-gray-500">
-                                Please tell us a bit more about yourself
-                                </p>
-                            </div>
+                                    await createUserProfile({
+                                        variables: {
+                                          query: { _id: app.currentUser.id },
+                                          set: formData
+                                        }
+                                    });
 
-                            <div className="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
-                                <MyTextInput label="Name" name="name" type="text"/>                               
-                                <MyTextInput label="City" name="city" type="text"/>                               
-                                <Country name="country" />
-                                <ProfilePic />
-                                <CoverPic />
-                                <MyTextInput label="Employer" name="employer" type="text"/>                               
-                                <MyTextInput label="Bio" name="bio" type="textarea"/>                               
-                                <MyTextInput label="Technologies" name="technologies" type="textarea"/>                               
-                                <Socials />
-                            </div>
-                        </div>
 
-                        <div className="pt-5">
-                            <div className="flex justify-end">
-                                <button type="button" className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                    Cancel
-                                </button>
-                                <button type="submit" className="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                    Save
-                                </button>
-                            </div>
-                        </div>
-                        </div>
-                    </Form>
-                  )}
-                </Formik>
+                                    setSuccess(true);
+                                } catch (error) {
+                                    console.log(error)
+                                    setError(true);
+                                }
+
+                                // const formData = {...values, img_url: profilePicResponse.location, cover_url: coverPicResponse.location}
+                                setSubmitting(false);
+
+                            }}
+                            
+                            >
+                            {formik => (
+                                <Form>
+                                    <div className="space-y-8 ">
+                                        <div className="space-y-8 divide-y divide-gray-200 sm:space-y-5">
+                                            <div>
+                                                <h3 className="text-lg leading-6 font-medium text-gray-900">
+                                                Almost There!
+                                                </h3>
+                                                <p className="mt-1 max-w-2xl text-sm text-gray-500">
+                                                Please tell us a bit more about yourself
+                                                </p>
+                                            </div>
+                                            <div className="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
+                                                <MyTextInput label="Name" name="name" type="text"/>                               
+                                                <MyTextInput label="Bio" name="bio" type="textarea"/>                               
+                                                <MyTextInput label="City" name="city" type="text"/>                               
+                                                <Country name="country" />
+                                                <MyTextInput label="Where do you work?" name="employer" type="text"/>                               
+                                                <MyTextInput label="Technologies" name="technologies" type="textarea"/>                               
+                                                <ProfilePic />
+                                                <CoverPic />
+                                                <Socials />
+                                            </div>
+                                        </div>
+
+                                        <div className="pt-5">
+                                            <div className="flex justify-end">
+                                                <button type="submit" className="w-20 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                    {formik.isSubmitting ? <LoadingSpinner color="white"/> : 'Save'}
+                                                </button>
+                                                <button type="button" className="ml-3 bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                    Cancel
+                                                </button>
+                                            </div>
+                                        </div>
+                                        {error ? 
+                                            <div className="pt-5">
+                                                <Alert 
+                                                type="error"
+                                                message="Oops. Something went wrong."
+                                                hide={() => setError(false)}
+                                                />
+                                            </div>
+                                        : null}
+                                    </div>
+                                </Form>
+                            )}
+                        </Formik>
+                    </div>
                 </div>
-                </div>
-
-
-            
-        </div>
+            </div>
         </>
      );
 }

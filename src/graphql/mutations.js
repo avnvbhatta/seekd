@@ -8,4 +8,13 @@ const CREATE_USER = gql`
   }
 `;
 
-export default {CREATE_USER}
+const CREATE_USER_PROFILE = gql`
+  mutation CreateUserProfile($query: UserQueryInput!, $set: UserUpdateInput!) {
+    updateOneUser(query: $query, set: $set){
+        _id,
+        name
+    }
+  }
+`;
+
+export default {CREATE_USER, CREATE_USER_PROFILE}

@@ -39,7 +39,7 @@ const Login = () => {
         try {
           console.log(email, password)
             await app.emailPasswordAuth.registerUser(email, password);
-            return await handleLogin();
+            return await handleLogin(email, password);
         } catch (error) {
             console.log((err) => ({ ...err, email: "Email is invalid." }))
         }
