@@ -7,42 +7,7 @@ import queries from "../../graphql/queries";
 import AlmostThere from '../almost-there/almost-there';
 
 const Home = () => {
-    // const { loading, data, error } = useQuery(queries.GET_USERS);
-
-    // console.log(data)
     const app = useRealmApp();
-    const id = app.currentUser.id;
-    const email = app.currentUser._profile.data.email;
-    const [createUser] = useMutation(mutations.CREATE_USER);
-    const [needsAccountSetup, setNeedsAccountSetup] = useState(true);
-  
-    const [getUser] = useLazyQuery(queries.GET_USER, {
-      onCompleted: data => {
-        console.log(data)
-          if(!data.user){
-            const _createUser = async () => {
-            const newUser = {
-                _id: id,
-                email: email
-            }
-            console.log('newuser', newUser)
-            const resp = await createUser({
-                variables: {
-                  user: newUser,
-                }
-              });
-              console.log(resp);
-              
-            }
-            _createUser();
-            setNeedsAccountSetup(true);
-          }
-          else{
-              data.user && data.user.name ? setNeedsAccountSetup(false) : setNeedsAccountSetup(true);
-          }
-      }
-    })
-
       
     const logOut = async () => {
       try {
@@ -52,31 +17,13 @@ const Home = () => {
       }
     }
 
-    useEffect(() => {
-      console.log('ue id', id)
-      getUser({ variables: { query: {_id: id } } } )
-    }, [])
-
-    if(needsAccountSetup){
-      return <AlmostThere />
-    }
 
     return ( 
         <div>
-            This is homesss
-            <p className="bg-blue-500 text-3xl">Testing tailwind</p>
-            {/* {loading ? <div>Loading...</div> :
-              <>
-                { data && data.users.map((user,idx) => {
-                return <p key={idx}>{user.name}</p>
-                })}
-              </>
-            }
-
-            <button onClick={() => register()}>Click to register</button>
-            <button onClick={() => logOut()}>Click to logout</button> */}
-            <button onClick={() => logOut()}>Log out</button>
-          
+            This is Home
+            <button type="button" onClick={() => logOut()} className="absolute inset y-0 right-0 cursor-pointer inline-flex items-center px-4 py-2 m-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                Sign Out
+            </button>
         </div>
      );
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRealmApp } from "../../RealmApp"
 import { Formik, Form, useField } from 'formik';
 import * as Yup from "yup";
@@ -15,6 +15,10 @@ const AlmostThere = () => {
     const app = useRealmApp();
     const URL = /^((https?|ftp):\/\/)?(www.)?(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i
 
+    const id = app.currentUser.id;
+    const email = app.currentUser._profile.data.email;
+    const [createUser] = useMutation(mutations.CREATE_USER);
+   
     const config = {
         bucketName: process.env.REACT_APP_S3_BUCKET,
         dirName: process.env.REACT_APP_S3_DIRECTORY, 
@@ -38,6 +42,18 @@ const AlmostThere = () => {
 
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
+
+    const _createUser = async () => {
+        const newUser = {
+            _id: id,
+            email: email
+        }
+        return await createUser({
+            variables: {
+                user: newUser,
+            }
+        });
+    }
 
     const handleImageUpload = (e, imgType) => {
 
@@ -71,11 +87,8 @@ const AlmostThere = () => {
             } catch (error) {
                 console.log(error)
             }   
-            console.log(file)
         }
     }
-
-   
 
     const MyTextInput = ({ label, type, ...props }) => {
         const [field, meta] = useField(props);
@@ -268,10 +281,15 @@ const AlmostThere = () => {
           console.log(error)
         }
       }
+   
+    useEffect(() => {
+
+    }, [success])
 
     if(success){
         return <Home />
     }
+ 
     return ( 
         <>
             <div className="min-h-screen bg-gray-50 flex flex-col pb-12 sm:px-6 lg:px-8 relative">
@@ -336,6 +354,8 @@ const AlmostThere = () => {
                             //todo
                                 let formData = {...values}
                                 try {
+                                    const createUserResponse = await _createUser();
+
                                     if(profilePic){
                                         const profilePicResponse = await uploadProfilePicToS3(profilePic, 'profile');
                                         formData = {...formData, img_url: profilePicResponse.location}
@@ -352,14 +372,12 @@ const AlmostThere = () => {
                                         }
                                     });
 
-
                                     setSuccess(true);
                                 } catch (error) {
                                     console.log(error)
                                     setError(true);
                                 }
 
-                                // const formData = {...values, img_url: profilePicResponse.location, cover_url: coverPicResponse.location}
                                 setSubmitting(false);
 
                             }}

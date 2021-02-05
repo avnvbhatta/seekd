@@ -10,6 +10,8 @@ import Confirm from './components/confirm/confirm';
 import Login from './components/login/login';
 import RealmApolloProvider from "./graphql/RealmApolloProvider";
 import { useRealmApp, RealmAppProvider } from "./RealmApp";
+import AlmostThere from './components/almost-there/almost-there';
+import Gateway from './components/gateway';
 
 export const APP_ID = "showcase-ofqyl";
 
@@ -34,7 +36,7 @@ function App() {
     <RealmAppProvider appId={APP_ID}>
       <RequireLoggedInUser>
         <RealmApolloProvider>
-          <Home />
+          <Gateway />
         </RealmApolloProvider>
       </RequireLoggedInUser>
     </RealmAppProvider>

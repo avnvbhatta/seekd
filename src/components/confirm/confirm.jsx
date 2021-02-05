@@ -16,13 +16,10 @@ const Confirm = (props) => {
 
 
     useEffect(() => {
-        console.log('id before', config.app.currentUser.id )
 
         const confirmUser = async () => {
             try {
                 const res = await config.app.emailPasswordAuth.confirmUser(token, tokenId);
-            console.log('id after', config.app.currentUser.id )
-
                 setConfirmSuccess(true);
                 
             } catch (error) {

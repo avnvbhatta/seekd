@@ -1,12 +1,8 @@
-import { useLazyQuery, useMutation } from '@apollo/client';
-import React, { useEffect, useState } from 'react';
-import {loginEmailPassword} from "../../graphql/auth";
-import mutations from "../../graphql/mutations";
-import queries from "../../graphql/queries";
+import React, { useState } from 'react';
 import * as Realm from "realm-web";
 import { useRealmApp } from "../../RealmApp"
 import { TextInput } from '../../ui/TextInput';
-import { Formik, Form, useField } from 'formik';
+import { Formik, Form } from 'formik';
 import * as Yup from "yup";
 import Alert from '../../ui/Alert';
 
@@ -25,19 +21,8 @@ const Login = () => {
     
 
     const handleRegistrationAndLogin = async (email, password) => {
-        // if (isValidEmailAddress) {
-        // try {
-        //     // Register the user and, if successful, log them in
-        //     // await app.emailPasswordAuth.registerUser(email, password);
-        //     return await handleLogin();
-        // } catch (err) {
-        //     // handleAuthenticationError(err, setError);
-        // }
-        // } else {
-        //   // setError((err) => ({ ...err, email: "Email is invalid." }));
-        // }
+      
         try {
-          console.log(email, password)
             await app.emailPasswordAuth.registerUser(email, password);
             return await handleLogin(email, password);
         } catch (error) {
