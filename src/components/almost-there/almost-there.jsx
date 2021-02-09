@@ -105,7 +105,7 @@ const AlmostThere = () => {
                             type="text"
                             name={props.name}
                             {...field} {...props}
-                            className={`max-w-lg block w-full shadow-sm  sm:max-w-xs sm:text-sm rounded-md  
+                            className={`max-w-lg block w-full shadow-sm  sm:text-sm rounded-md  
                             ${meta.touched && meta.error ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500' } `}/>
                         :
                         <textarea 
@@ -113,8 +113,7 @@ const AlmostThere = () => {
                             name={props.name}
                             {...field} {...props}
                             rows="6" 
-                            className={`max-w-lg shadow-sm block w-full rounded-md 
-                            ${meta.touched && meta.error ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500' } `}>
+                            className={`max-w-lg shadow-sm block w-full rounded-md                             ${meta.touched && meta.error ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500' } `}>
                             </textarea>
                                         
                     }
@@ -140,7 +139,7 @@ const AlmostThere = () => {
                         type="text" 
                         name={props.name}
                         {...field} {...props}
-                        className={`max-w-lg block w-full shadow-sm  sm:max-w-xs sm:text-sm rounded-md  
+                        className={`max-w-lg block w-full shadow-sm  sm:text-sm rounded-md  
                         ${meta.touched && meta.error ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500' } `}/>
                     <div className="text-sm text-red-500 mt-1">{meta.error}</div>
                 </div>
@@ -161,7 +160,7 @@ const AlmostThere = () => {
                             name="country" 
                             autoComplete="country" 
                             {...field} {...props}
-                            className={`max-w-lg block w-full shadow-sm  sm:max-w-xs sm:text-sm rounded-md  
+                            className={`max-w-lg block w-full shadow-sm  sm:text-sm rounded-md  
                             ${meta.touched && meta.error ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500' } `}>
                                 <option value="">Select a country</option>
                                 {countryList.map((country,idx) => <option key={idx} value={country}>{country}</option>)}
