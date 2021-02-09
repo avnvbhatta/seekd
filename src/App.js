@@ -12,6 +12,7 @@ import RealmApolloProvider from "./graphql/RealmApolloProvider";
 import { useRealmApp, RealmAppProvider } from "./RealmApp";
 import AlmostThere from './components/almost-there/almost-there';
 import Gateway from './components/gateway';
+import AddProject from './components/add-project';
 
 export const APP_ID = "showcase-ofqyl";
 
@@ -23,20 +24,17 @@ const RequireLoggedInUser = ({ children }) => {
 
 function App() {
   return (
-    // <Router>
-    //   <div>
-    //     <Switch>
-    //       <Route path="/" exact component={Home} />
-    //       <Route path="/home" component={Home}/>
-    //       <Route path="/confirm" component={Confirm}/>
-    //       <Route path="/login" component={Login}/>
-    //     </Switch>
-    //   </div>
-    // </Router>
+    
     <RealmAppProvider appId={APP_ID}>
       <RequireLoggedInUser>
         <RealmApolloProvider>
-          <Gateway />
+          <Router>
+              <Switch>
+                <Route path="/" exact component={Gateway} />
+                <Route path="/home" component={Home} />
+                <Route path="/add-project" component={AddProject}/>
+              </Switch>
+          </Router>
         </RealmApolloProvider>
       </RequireLoggedInUser>
     </RealmAppProvider>

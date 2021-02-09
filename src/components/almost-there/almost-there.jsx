@@ -352,7 +352,8 @@ const AlmostThere = () => {
                             }
                             onSubmit={async (values, { setSubmitting }) => {
                             //todo
-                                let formData = {...values}
+                                const _technologies = values.technologies.split(',').map(technology => technology = technology.trim())
+                                let formData = {...values, technologies: _technologies }
                                 try {
                                     const createUserResponse = await _createUser();
 

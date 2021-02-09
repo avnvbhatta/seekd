@@ -17,4 +17,12 @@ const CREATE_USER_PROFILE = gql`
   }
 `;
 
-export default {CREATE_USER, CREATE_USER_PROFILE}
+const CREATE_PROJECT = gql`
+  mutation CreateUserProfile($project: ProjectInsertInput!) {
+    insertOneProject(data: $project){
+        _id
+    }
+  }
+`;
+
+export default {CREATE_USER, CREATE_USER_PROFILE, CREATE_PROJECT}
