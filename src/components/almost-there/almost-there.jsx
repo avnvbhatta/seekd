@@ -21,7 +21,7 @@ const AlmostThere = () => {
    
     const config = {
         bucketName: process.env.REACT_APP_S3_BUCKET,
-        dirName: process.env.REACT_APP_S3_DIRECTORY, 
+        dirName: process.env.REACT_APP_S3_USERS_DIRECTORY, 
         region: process.env.REACT_APP_S3_REGION,
         accessKeyId: process.env.REACT_APP_S3_ACCESS_ID,
         secretAccessKey: process.env.REACT_APP_S3_ACCESS_SECRET_KEY,
@@ -32,9 +32,7 @@ const AlmostThere = () => {
 
     const [profilePic, setProfilePic] = useState(null);
     const [coverPic, setCoverPic] = useState(null);
-    const [tempProfilePic, setTempProfilePic] = useState(null);
     const [imgError, setImgError] = useState(false);
-    const [tempCoverPic, setTempCoverPic] = useState(null);
     const [coverImgError, setCoverImgError] = useState(false);
 
     const [createUserProfile] = useMutation(mutations.CREATE_USER_PROFILE);
@@ -62,9 +60,7 @@ const AlmostThere = () => {
                 setImgError(true);
             }
             else{
-                setImgError(false);
-                setProfilePic(e.target.files[0])
-                setTempProfilePic(window.URL.createObjectURL(e.target.files[0]))
+                setProfilePic({fileName: e.target.files[0], url: window.URL.createObjectURL(e.target.files[0])})
             }
         }
         else{
@@ -72,14 +68,12 @@ const AlmostThere = () => {
                 setCoverImgError(true);
             }
             else{
-                setCoverImgError(false);
-                setCoverPic(e.target.files[0])
-                setTempCoverPic(window.URL.createObjectURL(e.target.files[0]))
+                setCoverPic({fileName: e.target.files[0], url: window.URL.createObjectURL(e.target.files[0])})
             }
         }
     }
 
-    const uploadProfilePicToS3 = async (file, uploadType) => {
+    const uploadImageToS3 = async (file, uploadType) => {
         const fileName = `${uploadType === 'profile' ? 'profile_img_' : 'cover_img_'}${app.currentUser.id}`;
         if(file){
             try {
@@ -113,7 +107,7 @@ const AlmostThere = () => {
                             name={props.name}
                             {...field} {...props}
                             rows="6" 
-                            className={`max-w-lg shadow-sm block w-full rounded-md                             ${meta.touched && meta.error ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500' } `}>
+                            className={`max-w-lg shadow-sm block w-full rounded-md ${meta.touched && meta.error ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500' } `}>
                             </textarea>
                                         
                     }
@@ -193,27 +187,29 @@ const AlmostThere = () => {
                     <div className="mt-1 sm:mt-0 sm:col-span-2">
                         <div className="flex items-center">
                         {
-                            tempProfilePic ? 
-                            <img className="h-12 w-12 rounded-full overflow-hidden " src={tempProfilePic}/>
-                                :
-                            <span className="h-12 w-12 rounded-full overflow-hidden bg-gray-100">
+                            profilePic ? 
+                            <div className={`relative rounded-md `} >
+                                <img className="h-16 w-16 rounded-full overflow-hidden " src={profilePic.url}/>
+                                <div className="absolute cursor-pointer -top-3 -right-3 h-6 w-6 bg-red-500 text-white rounded-full flex justify-center items-center">
+                                    <svg className="h-5 w-3"xmlns="http://www.w3.org/2000/svg" fill="none" 
+                                    onClick={() => setProfilePic(null)}
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                                    </svg>
+                                </div>
+                            </div>
+                            :
+                            <span className="h-16 w-16 rounded-full overflow-hidden bg-gray-100">
                                 <svg className="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
                                 </svg>
                             </span>
+                            
                         }
                         <label className="ml-5 cursor-pointer bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             <span>Change</span>
                                 <input id="profile-pic-upload" name="profile-pic-upload" type="file" className="sr-only" onChange={e => handleImageUpload(e, 'profile')}/>
                         </label>
-                        {tempProfilePic ?
-                            <div className="text-red-500 ml-2 cursor-pointer" onClick={() => setTempProfilePic(null)}>
-                                <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </div> : null}
-
-
                         </div>
                         {imgError && <p className="mt-2 text-sm text-red-500">Please upload an image smaller than 1MB.</p>}
                     </div>
@@ -226,22 +222,25 @@ const AlmostThere = () => {
                         Cover photo
                     </label>
                     <div className="mt-2 sm:mt-0 sm:col-span-2 relative">
-                        {tempCoverPic && 
-                            <img className="rounded-md w-full h-36 overflow-hidden" src={tempCoverPic}/>
+                        {coverPic && 
+                            <div className={`relative rounded-md mr-4 mb-4`}>
+                                <img className="rounded-md w-full h-36 overflow-hidden" src={coverPic.url}/>
+                                <div className="absolute cursor-pointer -top-3 -right-3 h-6 w-6 bg-red-500 text-white rounded-full flex justify-center items-center">
+                                    <svg className="h-5 w-3"xmlns="http://www.w3.org/2000/svg" fill="none" 
+                                    onClick={() => setCoverPic(null)}
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                                    </svg>
+                                </div>
+                            </div>
                         }
                         
-                            {tempCoverPic ? 
+                            {coverPic ? 
                             <div className="flex items-center mt-4">
                                 <label className="cursor-pointer bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                     <span>Change</span>
                                         <input id="cover-pic-upload" name="cover-pic-upload" type="file" className="sr-only" onChange={e => handleImageUpload(e, 'cover')}/>
                                 </label>
-
-                                <div className="text-red-500 ml-2 cursor-pointer" onClick={() => setTempCoverPic(null)}>
-                                    <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                </div>
                             </div>
                             
                             :
@@ -253,7 +252,7 @@ const AlmostThere = () => {
                                         </svg>
                                         <div className="flex text-sm text-gray-600">
                                         <label htmlFor="cover-pic-upload" className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                                            {tempCoverPic ? null : <span>Upload a file</span>}
+                                            {coverPic ? null : <span>Upload a file</span>}
                                             <input id="cover-pic-upload" name="cover-pic-upload" type="file" className="sr-only" onChange={e => handleImageUpload(e, 'cover')} />
                                         </label>
                                         <p className="pl-1">or drag and drop</p>
@@ -315,7 +314,6 @@ const AlmostThere = () => {
                                 facebook: ''
                                 }
                             }
-                            validateOnChange
                             validationSchema = {
                                 
                                 Yup.object({
@@ -351,17 +349,17 @@ const AlmostThere = () => {
                             }
                             onSubmit={async (values, { setSubmitting }) => {
                             //todo
-                                const _technologies = values.technologies.split(',').map(technology => technology = technology.trim())
+                                const _technologies = values.technologies.split(',').map(technology => technology = technology.trim().toLowerCase())
                                 let formData = {...values, technologies: _technologies, projects: {link: []} }
                                 try {
                                     const createUserResponse = await _createUser();
 
                                     if(profilePic){
-                                        const profilePicResponse = await uploadProfilePicToS3(profilePic, 'profile');
+                                        const profilePicResponse = await uploadImageToS3(profilePic.fileName, 'profile');
                                         formData = {...formData, img_url: profilePicResponse.location}
                                     }
                                     if(coverPic){
-                                        const coverPicResponse = await uploadProfilePicToS3(coverPic, 'cover');
+                                        const coverPicResponse = await uploadImageToS3(coverPic.fileName, 'cover');
                                         formData = {...formData, cover_url: coverPicResponse.location}
                                     }
 
