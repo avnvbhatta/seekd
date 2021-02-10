@@ -28,7 +28,7 @@ const createRealmApolloClient = (app) => {
 
   const cache = new InMemoryCache();
 
-  return new ApolloClient({ link, cache });
+  return new ApolloClient({ link, cache, connectToDevTools: true } );
 };
 
 export default function RealmApolloProvider({ children }) {

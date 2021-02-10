@@ -41,6 +41,16 @@ const GET_USER = gql`
   }
 `;
 
-export default {GET_PROJECTS, GET_USERS, GET_USER}
+const GET_CURRENT_PROJECTS = gql`
+  query GetCurrentProjects($query: UserQueryInput!){
+    user(query: $query){
+      projects {
+        _id
+      }
+    }
+  }
+`;
+
+export default {GET_PROJECTS, GET_USERS, GET_USER, GET_CURRENT_PROJECTS}
 
 

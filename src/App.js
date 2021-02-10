@@ -1,15 +1,16 @@
 import './App.css';
-import Home from './components/home/home';
+import Home from './pages/home';
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
-  Link
+  Route
 } from "react-router-dom";
-import Confirm from './components/confirm/confirm';
-import Login from './components/login/login';
+import Login from './pages/login';
 import RealmApolloProvider from "./graphql/RealmApolloProvider";
 import { useRealmApp, RealmAppProvider } from "./RealmApp";
+import AddProject from './pages/add-project';
+import Gateway from './pages/gateway';
+import Sidebar from './components/sidebar';
 
 export const APP_ID = "showcase-ofqyl";
 
@@ -21,20 +22,24 @@ const RequireLoggedInUser = ({ children }) => {
 
 function App() {
   return (
-    // <Router>
-    //   <div>
-    //     <Switch>
-    //       <Route path="/" exact component={Home} />
-    //       <Route path="/home" component={Home}/>
-    //       <Route path="/confirm" component={Confirm}/>
-    //       <Route path="/login" component={Login}/>
-    //     </Switch>
-    //   </div>
-    // </Router>
+    
     <RealmAppProvider appId={APP_ID}>
       <RequireLoggedInUser>
         <RealmApolloProvider>
-          <Home />
+          <div class="h-screen flex overflow-hidden bg-white">
+            <Sidebar />
+            <div class="flex flex-col min-w-0 flex-1 overflow-hidden">
+              <Router>
+                <Switch>
+                  <Route path="/" exact component={Gateway} />
+                  <Route path="/home" component={Home} />
+                  <Route path="/add-project" component={AddProject}/>
+                </Switch>
+            </Router>
+            </div>
+          </div>
+          
+          
         </RealmApolloProvider>
       </RequireLoggedInUser>
     </RealmAppProvider>
