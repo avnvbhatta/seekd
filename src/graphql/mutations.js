@@ -18,11 +18,20 @@ const CREATE_USER_PROFILE = gql`
 `;
 
 const CREATE_PROJECT = gql`
-  mutation CreateUserProfile($project: ProjectInsertInput!) {
+  mutation CreateProject($project: ProjectInsertInput!) {
     insertOneProject(data: $project){
         _id
     }
   }
 `;
 
-export default {CREATE_USER, CREATE_USER_PROFILE, CREATE_PROJECT}
+const UPDATE_USER_ADD_PROJECT = gql`
+  mutation UpdateUserAddProject($query: UserQueryInput!, $set: UserUpdateInput!) {
+    updateOneUser(query: $query, set: $set){
+        _id,
+        name
+    }
+  }
+`;
+
+export default {CREATE_USER, CREATE_USER_PROFILE, CREATE_PROJECT, UPDATE_USER_ADD_PROJECT}
