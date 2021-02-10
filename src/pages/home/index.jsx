@@ -1,10 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useMutation, useLazyQuery, ApolloProvider } from "@apollo/client";
-import config from "../../graphql/config"
+import React from 'react';
 import { useRealmApp } from "../../RealmApp"
-import mutations from "../../graphql/mutations";
-import queries from "../../graphql/queries";
-import AlmostThere from '../almost-there/almost-there';
 
 const Home = () => {
     const app = useRealmApp();

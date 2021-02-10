@@ -4,8 +4,8 @@ import { Formik, Form, useField } from 'formik';
 import * as Yup from "yup";
 import S3 from 'aws-s3';
 import {countryList} from "../../constants"
-import LoadingSpinner from '../loadingspinner';
-import Home from "../home/home"
+import LoadingSpinner from '../../components/loadingspinner';
+import Home from "../home"
 import Alert from '../../ui/Alert';
 import mutations from "../../graphql/mutations";
 import { useMutation } from '@apollo/client';

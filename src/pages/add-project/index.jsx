@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useRealmApp } from "../../RealmApp"
 import { Formik, Form, useField } from 'formik';
 import * as Yup from "yup";
-import LoadingSpinner from '../loadingspinner';
-import Home from "../home/home"
+import LoadingSpinner from '../../components/loadingspinner';
 import Alert from '../../ui/Alert';
 import mutations from "../../graphql/mutations";
 import { useMutation, useQuery } from '@apollo/client';

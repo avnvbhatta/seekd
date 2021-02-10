@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useRealmApp } from "../../RealmApp"
-import LoadingSpinner from '../loadingspinner';
-import Home from "../home/home"
+import LoadingSpinner from '../../components/loadingspinner';
+import Home from "../home"
 import { useQuery } from '@apollo/client';
 import queries from "../../graphql/queries";
-import AlmostThere from '../almost-there/almost-there';
+import AlmostThere from '../almost-there';
 
 const Gateway = () => {
     const app = useRealmApp();
