@@ -1,7 +1,7 @@
 import React from 'react';
 
-const LoadingSpinner = ({color}) => (
-  <div className={`text-center ${color} mx-auto animate-spin ease duration-300 w-5 h-5`}>
+const LoadingSpinner = ({color, size}) => (
+  <div className={`text-center ${color} mx-auto animate-spin ease duration-300 ${size ? `w-${size} h-${size}` : 'w-5 h-5'}`}>
     <svg xmlns="http://www.w3.org/2000/svg" 
         viewBox="0 0 100 100" 
         style={{ display: "block",  backgroundColor: "rgb(255, 255, 255, 0)", animationPlayState: "paused"}}>

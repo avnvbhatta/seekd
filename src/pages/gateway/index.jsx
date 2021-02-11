@@ -15,11 +15,11 @@ const Gateway = () => {
     });
 
     if(loading){
-        return <LoadingSpinner color="blue-50"/>
+        return <LoadingSpinner color="text-blue-500" size="16"/>
     }
 
     if(data && data.user && data.user.name){
-        return <Home />
+        return <Home/>
     }
 
     return  <AlmostThere /> ;

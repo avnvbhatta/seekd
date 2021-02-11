@@ -21,22 +21,24 @@ const RequireLoggedInUser = ({ children }) => {
 };
 
 function App() {
+  console.log('rendered')
   return (
     
     <RealmAppProvider appId={APP_ID}>
       <RequireLoggedInUser>
         <RealmApolloProvider>
-          <div class="h-screen flex overflow-hidden bg-white">
+          <div className="h-screen flex overflow-hidden bg-white flex-col lg:flex-row">
+              
             <Sidebar />
-            <div class="flex flex-col min-w-0 flex-1 overflow-hidden">
+            <div className="m-4 w-full">
               <Router>
                 <Switch>
-                  <Route path="/" exact component={Gateway} />
-                  <Route path="/home" component={Home} />
-                  <Route path="/add-project" component={AddProject}/>
+                    <Route path="/" exact component={Gateway} />
+                    <Route path="/home" component={Home} />
+                    <Route path="/add-project" component={AddProject}/>
                 </Switch>
-            </Router>
-            </div>
+              </Router>
+              </div>
           </div>
           
           
