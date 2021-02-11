@@ -27,19 +27,22 @@ function App() {
     <RealmAppProvider appId={APP_ID}>
       <RequireLoggedInUser>
         <RealmApolloProvider>
-          <div className="h-screen flex overflow-hidden bg-white flex-col lg:flex-row">
-              
-            <Sidebar />
-            <div className="m-4 w-full">
-              <Router>
-                <Switch>
-                    <Route path="/" exact component={Gateway} />
-                    <Route path="/home" component={Home} />
-                    <Route path="/add-project" component={AddProject}/>
-                </Switch>
-              </Router>
+          <div className="bg-gray-100 h-screen w-full">
+            <div className="h-full flex overflow-hidden bg-white flex-col lg:flex-row max-w-7xl mx-auto w-full">
+                
+                <Sidebar />
+                <div className="p-4 w-full">
+                  <Router>
+                    <Switch>
+                        <Route path="/" exact component={Gateway} />
+                        <Route path="/home" component={Home} />
+                        <Route path="/add-project" component={AddProject}/>
+                    </Switch>
+                  </Router>
+                  </div>
               </div>
           </div>
+          
           
           
         </RealmApolloProvider>
