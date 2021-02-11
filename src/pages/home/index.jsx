@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import FeaturedCard from '../../components/featured-card';
 import { useRealmApp } from "../../RealmApp"
 import { Context } from '../../contexts';
+import MyCarousel from '../../components/carousel';
 
 const Home = () => {
     const app = useRealmApp();
@@ -14,6 +15,9 @@ const Home = () => {
             <span className="inline">Featured</span>
             <span className="text-blue-500 xl:inline">Project</span>
           </h1>
+
+          
+
           <div className="featured max-w-4xl mx-auto">
             <FeaturedCard />
           </div>

@@ -35,7 +35,7 @@ function App() {
             <div className="bg-gray-100 h-screen w-full">
               <div className="h-full flex overflow-hidden bg-white flex-col lg:flex-row  mx-auto w-full">
                   <Sidebar />
-                  <div className="flex flex-col w-full flex-1 overflow-hidden">
+                  <div className="flex flex-col w-full flex-1 overflow-hidden bg-gray-50">
                     <div className="overflow-y-auto">
                       <Switch>
                           <WithContextRoute path="/" exact component={Gateway} />
