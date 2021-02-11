@@ -37,7 +37,7 @@ const MyCarousel = ({images}) => {
                 
             >
                 {images.map((image,idx) => {
-                    return <div className="rounded-lg">
+                    return <div className="rounded-lg" key={idx}>
                             <img 
                             src={image} />
                         </div>

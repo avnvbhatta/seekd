@@ -26,18 +26,18 @@ const Project = () => {
             <span className="inline">View</span>
             <span className="text-blue-500 xl:inline">Project</span>
         </h1>
-        <div className=" flex flex-col mt-8 lg:mt-0 items-start justify-center lg:items-center">
+        <div className=" flex flex-col mt-8 lg:mt-0 items-start justify-center md:items-center">
              
-            <div class="overflow-hidden bg-white mx-12 rounded-lg shadow-lg">
-                    <div class="relative -mt-8 mb-8  max-w-xl mx-auto px-4 sm:px-6 lg:px-8 lg:max-w-7xl">
-                        <div class="relative mt-12 sm:mt-16 lg:mt-24">
+            <div className="overflow-hidden bg-white mx-12 rounded-lg shadow-lg">
+                    <div className="relative -mt-8 mb-8  max-w-xl mx-auto px-4 sm:px-6 lg:px-8 lg:max-w-7xl">
+                        <div className="relative mt-12 sm:mt-16 lg:mt-24">
                        
-                        <div class="lg:grid lg:grid-flow-row-dense lg:grid-cols-2 lg:gap-8 lg:items-center">
-                            <div class="lg:col-start-2">
-                            <h3 class="text-2xl font-extrabold text-gray-900 tracking-tight sm:text-3xl">
+                        <div className={`lg:grid lg:grid-flow-row-dense ${data.project.images.length > 0 ? 'lg:grid-cols-2' : 'lg:grid-cols-1' } lg:gap-8 lg:items-center`}>
+                            <div className="lg:col-start-2">
+                            <h3 className="text-2xl font-extrabold text-gray-900 tracking-tight sm:text-3xl">
                                 {data.project.name}
                             </h3>
-                            <p class="mt-3 text-lg text-gray-500">
+                            <p className="mt-3 text-lg text-gray-500">
                                 {data.project.description}
                             </p>
                             <div className="mt-6 flex items-center">
@@ -80,9 +80,9 @@ const Project = () => {
                             
                             </div>
 
-                            <div className="mt-10 -mx-4 relative lg:mt-0 lg:col-start-1 flex justify-center items-center ">
+                            {data.project.images.length > 0 && <div className="mt-10 -mx-4 relative lg:mt-0 lg:col-start-1 flex justify-center items-center ">
                                 <MyCarousel images={data.project.images}/>
-                            </div>
+                            </div>}
                         </div>
                         </div>
                     </div>
