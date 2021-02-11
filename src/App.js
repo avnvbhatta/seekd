@@ -11,6 +11,8 @@ import { useRealmApp, RealmAppProvider } from "./RealmApp";
 import AddProject from './pages/add-project';
 import Gateway from './pages/gateway';
 import Sidebar from './components/sidebar';
+import {Provider} from "./contexts/"
+import Profile from './pages/profile';
 
 export const APP_ID = "showcase-ofqyl";
 
@@ -21,27 +23,27 @@ const RequireLoggedInUser = ({ children }) => {
 };
 
 function App() {
-  console.log('rendered')
   return (
-    
     <RealmAppProvider appId={APP_ID}>
       <RequireLoggedInUser>
         <RealmApolloProvider>
-          <div className="bg-gray-100 h-screen w-full">
-            <div className="h-full flex overflow-hidden bg-white flex-col lg:flex-row max-w-7xl mx-auto w-full">
-                
-                <Sidebar />
-                <div className="p-4 w-full">
-                  <Router>
-                    <Switch>
-                        <Route path="/" exact component={Gateway} />
-                        <Route path="/home" component={Home} />
-                        <Route path="/add-project" component={AddProject}/>
-                    </Switch>
-                  </Router>
-                  </div>
-              </div>
-          </div>
+          <Provider>
+            <Router>
+            <div className="bg-gray-100 h-screen w-full">
+              <div className="h-full flex overflow-hidden bg-white flex-col lg:flex-row max-w-7xl mx-auto w-full">
+                  <Sidebar />
+                  <div className="w-full overflow-y-scroll">
+                      <Switch>
+                          <Route path="/" exact component={Gateway} />
+                          <Route path="/home" component={Home} />
+                          <Route path="/add-project" component={AddProject}/>
+                          <Route path="/profile" component={Profile}/>
+                      </Switch>
+                    </div>
+                </div>
+            </div>
+            </Router>
+          </Provider>
           
           
           

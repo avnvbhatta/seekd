@@ -7,12 +7,12 @@ const FeaturedCard = (props) => {
 
 
   return (
-    <div className="relative flex flex-col lg:flex-row rounded-md  lg:rounded-l-md shadow-lg cursor-pointer z-50 ">
+    <div className="relative flex flex-col lg:flex-row rounded-md  lg:rounded-l-md shadow-lg cursor-pointer">
       <div
-        className="left w-full lg:w-3/5 h-48 lg:h-auto z-10 rounded-t-md lg:rounded-r-none lg:rounded-b-none lg:rounded-l-md"
+        className="left w-full lg:w-3/5 h-48 lg:h-auto  rounded-t-md lg:rounded-r-none lg:rounded-b-none lg:rounded-l-md"
         style={{ backgroundImage: `url(https://images.unsplash.com/photo-1612971446746-b79cc11824f5?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1351&q=80)`, backgroundSize: 'cover', backgroundPosition: 'center' }}
       />
-      <div className="right  p-6 lg:py-8 px-8 w-full lg:w-2/5 z-10 bg-white rounded-b-md lg:rounded-l-none lg:rounded-r-md flex flex-col h-full justify-center">
+      <div className="right  p-6 lg:py-8 px-8 w-full lg:w-2/5  bg-white rounded-b-md lg:rounded-l-none lg:rounded-r-md flex flex-col h-full justify-center">
         <div className="text-left">
           <h1 className="text-3xl tracking-tight font-extrabold text-gray-900 sm:text-5xl lg:text-4xl hidden lg:block">
             <span className="block xl:inline text-black">{title}</span>

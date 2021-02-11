@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useRealmApp } from "../../RealmApp"
+import { Context } from "../../contexts";
+import { Link } from 'react-router-dom';
 
 const Sidebar = () => {
     const app = useRealmApp();
+    const {user} = useContext(Context);
     
     const logOut = async () => {
         try {
@@ -17,13 +20,15 @@ const Sidebar = () => {
     const Nav = () => {
         return <nav aria-label="Sidebar" className="mt-5">
         <div className="px-2 space-y-1">
-        <a href="#" className="bg-gray-100 text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md">
-            <svg className="text-gray-500 mr-4 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-            </svg>
-            Home
-        </a>
-
+        <Link to="/home">
+            <div className="bg-gray-100 text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md">
+                <svg className="text-gray-500 mr-4 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+                Home
+            </div>
+        </Link>
+        
         </div>
         <hr className="border-t border-gray-200 my-5" aria-hidden="true" />
         <div className="px-2 space-y-1">
@@ -99,14 +104,16 @@ const Sidebar = () => {
                             <div className="flex-shrink-0 w-full group block">
                                 <div className="flex items-center justify-between">
                                     <div className="flex flex-row  cursor-pointer">
-                                        <img className="inline-block h-9 w-9 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixqx=D2hXbp6dVH&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
+                                        <img className="inline-block h-9 w-9 rounded-full" src={user.img_url} alt=""/>
                                         <div className="ml-3">
                                             <p className="text-sm font-medium text-gray-700 group-hover:text-gray-900">
-                                            Tom Cook
+                                                {user.name}
                                             </p>
-                                            <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700">
-                                            View profile
-                                            </p>
+                                            <Link to="/profile">
+                                                <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700">
+                                                    View profile
+                                                </p>
+                                            </Link>
                                         </div>
                                     </div>
                                     <div className="text-blue-500 cursor-pointer" onClick={() => logOut()}>
@@ -139,14 +146,17 @@ const Sidebar = () => {
                 <div className="flex-shrink-0 w-full group block">
                     <div className="flex items-center justify-between">
                         <div className="flex flex-row  cursor-pointer">
-                            <img className="inline-block h-9 w-9 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixqx=D2hXbp6dVH&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
+                            <img className="inline-block h-9 w-9 rounded-full" src={user.img_url} alt=""/>
                             <div className="ml-3">
                                 <p className="text-sm font-medium text-gray-700 group-hover:text-gray-900">
-                                Tom Cook
+                                    {user.name}
                                 </p>
-                                <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700">
-                                View profile
-                                </p>
+                                <Link to="/profile">
+                                    <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700">
+                                        View profile
+                                    </p>
+                                </Link>
+                               
                             </div>
                         </div>
                         <div className="text-blue-500 cursor-pointer" onClick={() => logOut()}>

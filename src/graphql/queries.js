@@ -35,8 +35,30 @@ const GET_USERS = gql`
 const GET_USER = gql`
   query GetUser($query: UserQueryInput!){
     user(query: $query){
-       _id,
-       name
+      _id
+      bio
+      city
+      country
+      cover_url
+      employer
+      facebook
+      img_url
+      instagram
+      linkedin
+      name
+      twitter
+      website
+      technologies
+      projects {
+        _id
+        name
+        description
+        likes
+        images
+        url
+        technologies
+        repository_url
+      }
     }
   }
 `;
