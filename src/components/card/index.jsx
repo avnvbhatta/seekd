@@ -1,14 +1,19 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import LoadingSpinner from '../loadingspinner';
 
 const Card = ({user, project}) => {
 
+  if(!user || !project){
+    return <LoadingSpinner />
+  }
+
   return (
-    <div className="visible flex flex-col rounded-lg shadow-lg overflow-hidden max-w-sm lg:mr-4 mb-4">
+    <div className="visible flex flex-col rounded-lg shadow-md overflow-hidden max-w-xs lg:max-w-sm md:justify-center lg:justify-start">
       <div className="flex-shrink-0" >
         <img
           className="h-48 w-full object-cover"
-          src={project.images[0] ? project.images[0] : user.cover_url}
+          src={project.images[0] ? project.images[0] : 'https://via.placeholder.com/250x150'}
           alt="feature_image"
         />
       </div>
@@ -31,7 +36,7 @@ const Card = ({user, project}) => {
             <a href="#">
               <img
                 className="h-10 w-10 rounded-full"
-                src={user.img_url}
+                src={user.img_url ? user.img_url : 'https://via.placeholder.com/150x150'}
                 alt=""
               />
             </a>

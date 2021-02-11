@@ -3,16 +3,19 @@ import gql from "graphql-tag";
 const GET_PROJECTS = gql`
   query {
       projects {
-        _id
-        comments
         description
         images
         likes
         name
-        project_id
         repository_url
         technologies
         url
+        user_id {
+          name
+          city
+          img_url
+          employer
+        }
     }
   }
 `;

@@ -15,7 +15,7 @@ const Profile = () => {
             <div className="">
               <img className=" h-60 w-full object-cover" src={user.cover_url} alt=""/>
             </div>
-            <div className="bottom-32 relative max-w-5xl mx-8 rounded-lg px-4 py-16 lg:px-8 ">
+            <div className="bottom-32 relative mx-8 rounded-lg px-4 py-16 lg:px-8 ">
               <div className="flex flex-col justify-items-start">
                 <div className="flex">
                   <img className="h-36 w-36 rounded-full ring-8 ring-white sm:h-36 sm:w-36" src={user.img_url} alt=""/>
@@ -58,7 +58,7 @@ const Profile = () => {
                         <span className="inline">{`${user.name.split(" ")[0]}'s `}</span>
                         <span className="text-blue-500 xl:inline">Projects</span>
                     </h1>
-                    <div className="flex flex-wrap justify-center">
+                    <div className="flex flex-wrap justify-center lg:justify-start">
                         {
                             user.projects.map((project,idx) => {
                                 return <Card user={user} project={project} key={idx}/>
