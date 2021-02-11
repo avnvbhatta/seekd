@@ -13,6 +13,7 @@ import Gateway from './pages/gateway';
 import Sidebar from './components/sidebar';
 import {Provider} from "./contexts/"
 import Profile from './pages/profile';
+import WithContextRoute from './components/context-hoc';
 
 export const APP_ID = "showcase-ofqyl";
 
@@ -30,14 +31,14 @@ function App() {
           <Provider>
             <Router>
             <div className="bg-gray-100 h-screen w-full">
-              <div className="h-full flex overflow-hidden bg-white flex-col lg:flex-row max-w-7xl mx-auto w-full">
+              <div className="h-full flex overflow-hidden bg-white flex-col lg:flex-row max-w-screen-2xl mx-auto w-full">
                   <Sidebar />
                   <div className="w-full overflow-y-scroll">
                       <Switch>
-                          <Route path="/" exact component={Gateway} />
-                          <Route path="/home" component={Home} />
-                          <Route path="/add-project" component={AddProject}/>
-                          <Route path="/profile" component={Profile}/>
+                          <WithContextRoute path="/" exact component={Gateway} />
+                          <WithContextRoute path="/home" component={Home} />
+                          <WithContextRoute path="/add-project" component={AddProject}/>
+                          <WithContextRoute path="/profile" component={Profile}/>
                       </Switch>
                     </div>
                 </div>

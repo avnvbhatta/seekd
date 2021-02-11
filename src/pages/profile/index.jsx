@@ -1,10 +1,15 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import Card from '../../components/card';
+import LoadingSpinner from '../../components/loadingspinner';
 import { Context } from "../../contexts";
 
 const Profile = () => {
     const { user } = useContext(Context);
-    console.log(user)
+    
+    if(Object.entries(user).length < 1){
+        return <LoadingSpinner color="text-blue-500" size="16"/>
+    }
+
     return ( 
           <div>
             <div className="">
@@ -56,7 +61,7 @@ const Profile = () => {
                     <div className="flex flex-wrap justify-center">
                         {
                             user.projects.map((project,idx) => {
-                                return <Card user={user} project={project}/>
+                                return <Card user={user} project={project} key={idx}/>
                             })
                         }
                     </div>
