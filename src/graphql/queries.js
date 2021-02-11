@@ -3,18 +3,40 @@ import gql from "graphql-tag";
 const GET_PROJECTS = gql`
   query {
       projects {
-        _id
-        comments
         description
         images
         likes
         name
-        project_id
         repository_url
         technologies
         url
+        user_id {
+          name
+          city
+          img_url
+          employer
+        }
     }
   }
+`;
+
+
+const GET_PROJECT_BY_NAME =  gql`
+query GetProjectByName($query: ProjectQueryInput!){
+  project(query: $query){
+    description
+    images
+    likes
+    name
+    repository_url
+    technologies
+    url
+    user_id {
+      name
+      img_url
+    }
+  }
+}
 `;
 
 const GET_USERS = gql`
@@ -35,8 +57,30 @@ const GET_USERS = gql`
 const GET_USER = gql`
   query GetUser($query: UserQueryInput!){
     user(query: $query){
-       _id,
-       name
+      _id
+      bio
+      city
+      country
+      cover_url
+      employer
+      facebook
+      img_url
+      instagram
+      linkedin
+      name
+      twitter
+      website
+      technologies
+      projects {
+        _id
+        name
+        description
+        likes
+        images
+        url
+        technologies
+        repository_url
+      }
     }
   }
 `;
@@ -51,6 +95,6 @@ const GET_CURRENT_PROJECTS = gql`
   }
 `;
 
-export default {GET_PROJECTS, GET_USERS, GET_USER, GET_CURRENT_PROJECTS}
+export default {GET_PROJECTS, GET_USERS, GET_USER, GET_CURRENT_PROJECTS, GET_PROJECT_BY_NAME}
 
 

@@ -1,24 +1,34 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import FeaturedCard from '../../components/featured-card';
 import { useRealmApp } from "../../RealmApp"
+import { Context } from '../../contexts';
+import MyCarousel from '../../components/carousel';
 
 const Home = () => {
     const app = useRealmApp();
-      
-    const logOut = async () => {
-      try {
-        await app.logOut();
-      } catch (error) {
-        console.log(error)
-      }
-    }
-
+    const {user, setUser} = useContext(Context);   
+   
 
     return ( 
         <div>
-            This is Home
-            <button type="button" onClick={() => logOut()} className="absolute inset y-0 right-0 cursor-pointer inline-flex items-center px-4 py-2 m-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                Sign Out
-            </button>
+          <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-4xl my-4">
+            <span className="inline">Featured</span>
+            <span className="text-blue-500 xl:inline">Project</span>
+          </h1>
+
+          
+
+          <div className="featured max-w-4xl mx-auto">
+            <FeaturedCard />
+          </div>
+
+          <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-4xl my-4">
+            <span className="inline">Recent</span>
+            <span className="text-blue-500 xl:inline">Projects</span>
+          </h1>
+          <div className="featured max-w-4xl mx-auto">
+            <FeaturedCard />
+          </div>
         </div>
      );
 }
