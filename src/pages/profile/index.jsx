@@ -1,4 +1,5 @@
 import React, { useContext, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import Card from '../../components/card';
 import LoadingSpinner from '../../components/loadingspinner';
 import { Context } from "../../contexts";
@@ -61,7 +62,11 @@ const Profile = () => {
                     <div className="flex flex-wrap justify-center lg:justify-start">
                         {
                             user.projects.map((project,idx) => {
-                                return <Card user={user} project={project} key={idx}/>
+                                return <Link to={`/projects/${project.name}`} key={idx}> 
+                                    <div className="md:mx-2 mb-4">
+                                        <Card  project={project} user={user}/>
+                                    </div>
+                                </Link>
                             })
                         }
                     </div>

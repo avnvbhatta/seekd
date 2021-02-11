@@ -4,6 +4,8 @@ import { Context } from "../../contexts";
 import { Link } from 'react-router-dom';
 
 const Sidebar = () => {
+    console.log('rendered sidebar')
+
     const app = useRealmApp();
     const {user} = useContext(Context);
     

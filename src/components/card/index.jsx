@@ -19,7 +19,6 @@ const Card = ({user, project}) => {
       </div>
       <div className="flex-1 bg-white p-6 flex flex-col justify-between">
         <div className="flex-1">
-          <Link to={`/blog/`}>
             <div className="block cursor-pointer">
               <h3 className="mt-2 text-xl leading-7 font-semibold text-gray-900">
                 {project.name}
@@ -28,26 +27,23 @@ const Card = ({user, project}) => {
                 {project.description}
               </p>
             </div>
-          </Link>
-
         </div>
         <div className="mt-6 flex items-center">
           <div className="flex-shrink-0">
-            <a href="#">
+            <div>
               <img
                 className="h-10 w-10 rounded-full"
                 src={user.img_url ? user.img_url : 'https://via.placeholder.com/150x150'}
                 alt=""
               />
-            </a>
+            </div>
           </div>
           <div className="ml-3">
-            <p className="text-sm leading-5 font-medium text-gray-900">
-              <a href="#" className="hover:underline">
+            <div className="text-sm leading-5 font-medium text-gray-900">
+              <p className="hover:underline">
                 {user.name}
-              </a>
-            </p>
-            
+              </p>
+            </div>
           </div>
         </div>
       </div>

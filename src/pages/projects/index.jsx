@@ -1,12 +1,11 @@
 import { useQuery } from '@apollo/client';
 import React from 'react';
 import queries from '../../graphql/queries';
-import { useRealmApp } from "../../RealmApp";
 import Card from "../../components/card"
 import LoadingSpinner from '../../components/loadingspinner';
+import { Link } from 'react-router-dom';
 
 const Projects = () => {
-    const app = useRealmApp();
 
     const { loading, data } = useQuery(queries.GET_PROJECTS);
 
@@ -24,7 +23,11 @@ const Projects = () => {
             
                 <div className="flex flex-wrap justify-center lg:justify-start">
                     {data.projects.map( (project,idx) => {
-                        return <div className="md:mx-2 mb-4"><Card key={idx} project={project} user={project.user_id}/></div>
+                        return <Link to={`/profile/${project.name}`} key={idx}> 
+                                <div className="md:mx-2 mb-4">
+                                    <Card  project={project} user={project.user_id}/>
+                                </div>
+                            </Link>
                     })}
                 </div>
             
