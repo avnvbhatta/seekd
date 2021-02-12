@@ -1,7 +1,8 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useRealmApp } from "../../RealmApp"
 import { Context } from "../../contexts";
 import { Link } from 'react-router-dom';
+import Avatar from "../../ui/Avatar";
 
 const Sidebar = () => {
     console.log('rendered sidebar')
@@ -54,15 +55,26 @@ const Sidebar = () => {
         </div>
         <hr className="border-t border-gray-200 my-5" aria-hidden="true" />
         <div className="px-2 space-y-1">
-        <a href="#" className="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md">
-            <svg className="text-gray-500 mr-4 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-            </svg>
-            Add a Project
-        </a>
+        <Link to="/add-project">
+            <div className="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md">
+                <svg className="text-gray-500 mr-4 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                </svg>
+                Add a Project
+            </div>
+        </Link>
+        
 
         </div>
     </nav>
+    }
+
+    useEffect(() => {
+
+    },[user.name])
+
+    if(!user || !user.name){
+        return <div></div>
     }
     return ( 
         <>
@@ -109,19 +121,21 @@ const Sidebar = () => {
                             <div className="flex-shrink-0 flex border-t border-gray-200 p-4">
                             <div className="flex-shrink-0 w-full group block">
                                 <div className="flex items-center justify-between">
+                                <Link to="/profile">
                                     <div className="flex flex-row  cursor-pointer">
-                                        <img className="inline-block h-9 w-9 rounded-full" src={user.img_url} alt=""/>
+                                    {user && user.img_url ? <img className="inline-block h-9 w-9 rounded-full" src={user.img_url} alt=""/> : <Avatar size={9}/>}
+                                    
                                         <div className="ml-3">
                                             <p className="text-sm font-medium text-gray-700 group-hover:text-gray-900">
                                                 {user.name}
                                             </p>
-                                            <Link to="/profile">
+                                            
                                                 <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700">
                                                     View profile
                                                 </p>
-                                            </Link>
                                         </div>
                                     </div>
+                                    </Link>
                                     <div className="text-blue-500 cursor-pointer" onClick={() => logOut()}>
                                         <svg className="text-gray-400 group-hover:text-gray-500 mr-4 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -152,7 +166,7 @@ const Sidebar = () => {
                 <div className="flex-shrink-0 w-full group block">
                     <div className="flex items-center justify-between">
                         <div className="flex flex-row  cursor-pointer">
-                            <img className="inline-block h-9 w-9 rounded-full" src={user.img_url} alt=""/>
+                            {user && user.img_url ? <img className="inline-block h-9 w-9 rounded-full" src={user.img_url} alt=""/> : <Avatar size={9}/>}
                             <div className="ml-3">
                                 <p className="text-sm font-medium text-gray-700 group-hover:text-gray-900">
                                     {user.name}

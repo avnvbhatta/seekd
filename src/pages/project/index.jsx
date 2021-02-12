@@ -2,9 +2,9 @@ import { useQuery } from '@apollo/client';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import MyCarousel from '../../components/carousel';
-import FeaturedCard from '../../components/featured-card';
 import LoadingSpinner from '../../components/loadingspinner';
 import queries from '../../graphql/queries';
+import Avatar from "../../ui/Avatar";
 
 const Project = () => {
 
@@ -21,7 +21,6 @@ const Project = () => {
 
     return (
         <>
-        {console.log(data)}
         <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-4xl mt-4 ml-12 mb-16">
             <span className="inline">View</span>
             <span className="text-blue-500 xl:inline">Project</span>
@@ -32,7 +31,7 @@ const Project = () => {
                     <div className="relative -mt-8 mb-8  max-w-xl mx-auto px-4 sm:px-6 lg:px-8 lg:max-w-7xl">
                         <div className="relative mt-12 sm:mt-16 lg:mt-24">
                        
-                        <div className={`lg:grid lg:grid-flow-row-dense ${data.project.images.length > 0 ? 'lg:grid-cols-2' : 'lg:grid-cols-1' } lg:gap-8 lg:items-center`}>
+                        <div className={`lg:grid lg:grid-flow-row-dense lg:grid-cols-2 lg:gap-8 lg:items-center`}>
                             <div className="lg:col-start-2">
                             <h3 className="text-2xl font-extrabold text-gray-900 tracking-tight sm:text-3xl">
                                 {data.project.name}
@@ -42,9 +41,7 @@ const Project = () => {
                             </p>
                             <div className="mt-6 flex items-center">
                                 <div className="flex-shrink-0">
-                                    <a href="#">
-                                        <img className=" h-12 w-12 rounded-full" src={data.project.user_id.img_url} alt=""/>
-                                    </a>
+                                    {data && data.project.user_id.img_url ? <img className="h-12 w-12 rounded-full ring-8 ring-white sm:h-36 sm:w-36" src={data.project.user_id.img_url} alt=""/> : <Avatar size={12}/>  }
                                 </div>
                                 <div className="ml-3">
                                     <p className="text-lg leading-5 font-medium text-gray-900">
@@ -80,9 +77,17 @@ const Project = () => {
                             
                             </div>
 
-                            {data.project.images.length > 0 && <div className="mt-10 -mx-4 relative lg:mt-0 lg:col-start-1 flex justify-center items-center ">
+                            {data.project.images.length > 0 ? <div className="mt-10 -mx-4 relative lg:mt-0 lg:col-start-1 flex justify-center items-center ">
                                 <MyCarousel images={data.project.images}/>
-                            </div>}
+                            </div>
+                            :
+                            <div class="mt-10 -mx-4 relative lg:mt-0 lg:col-start-1 ">
+                                <svg className="text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5" />
+                                </svg>
+                            </div>
+                            }
+                            
                         </div>
                         </div>
                     </div>
