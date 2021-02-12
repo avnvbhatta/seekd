@@ -1,4 +1,4 @@
-const colors = ['blue', 'red', 'purple', 'green', 'purple', 'yellow', 'pink']
+const colors = ['blue', 'purple', 'green', ]
 const index = [300, 400, 500, 600]
 
 const getRandomColor = () => {

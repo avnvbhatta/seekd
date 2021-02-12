@@ -241,8 +241,8 @@ const AddProject = () => {
                                 try {
 
                                     await getS3URLs();
-                                    
-                                    newProject = {...values, technologies:_technologies, images: s3ImgUrls, user_id: {link: id}}
+                                    const currentDateTime = new Date().toISOString().replace('T', ' ').substring(0, 19);
+                                    newProject = {...values, technologies:_technologies, images: s3ImgUrls, user_id: {link: id}, createDate: currentDateTime}
                                     let createProjectResponse = await createProject({
                                         variables: {
                                             project: newProject,

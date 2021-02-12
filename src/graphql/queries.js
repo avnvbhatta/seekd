@@ -95,6 +95,57 @@ const GET_CURRENT_PROJECTS = gql`
   }
 `;
 
-export default {GET_PROJECTS, GET_USERS, GET_USER, GET_CURRENT_PROJECTS, GET_PROJECT_BY_NAME}
+const GET_FEATURED_PROJECT = gql`
+  query GetCurrentProjects{
+    project(query: {featured: true}){
+      description
+      images
+      likes
+      name
+      repository_url
+      technologies
+      url
+      user_id {
+        name
+        img_url
+      }
+  }
+  }
+`;
+
+
+const GET_RECENT_PROJECTS = gql`
+  query GetRecentProjects{
+    projects(sortBy: CREATEDATE_DESC, limit: 6 ) {
+      _id
+      createDate
+      description
+      images
+      likes
+      name
+      repository_url
+      technologies
+      url
+      user_id {
+        _id
+        bio
+        city
+        country
+        cover_url
+        createDate
+        employer
+        facebook
+        img_url
+        instagram
+        linkedin
+        name
+        twitter
+        website
+      }
+    }
+  }
+`;
+
+export default {GET_PROJECTS, GET_USERS, GET_USER, GET_CURRENT_PROJECTS, GET_PROJECT_BY_NAME, GET_FEATURED_PROJECT, GET_RECENT_PROJECTS}
 
 

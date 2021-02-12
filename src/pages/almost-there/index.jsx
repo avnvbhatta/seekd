@@ -350,7 +350,8 @@ const AlmostThere = () => {
                             onSubmit={async (values, { setSubmitting }) => {
                             //todo
                                 const _technologies = values.technologies.split(',').map(technology => technology = technology.trim().toLowerCase())
-                                let formData = {...values, technologies: _technologies, projects: {link: []} }
+                                const currentDateTime = new Date().toISOString().replace('T', ' ').substring(0, 19);
+                                let formData = {...values, technologies: _technologies, projects: {link: []}, createDate: currentDateTime }
                                 try {
                                     const createUserResponse = await _createUser();
 
