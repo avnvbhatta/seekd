@@ -5,11 +5,8 @@ import {getRandomGradient} from "../../utils/index"
 const FeaturedCard = ({project}) => {
   
   return (
-    <div className="relative flex flex-col lg:flex-row rounded-md  lg:rounded-l-md shadow-lg cursor-pointer">
-      {/* <div
-        className="left w-full lg:w-3/5 h-48 lg:h-auto  rounded-t-md lg:rounded-r-none lg:rounded-b-none lg:rounded-l-md"
-        style={{ backgroundImage: `url(https://images.unsplash.com/photo-1612971446746-b79cc11824f5?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1351&q=80)`, backgroundSize: 'cover', backgroundPosition: 'center' }}
-      /> */}
+    <div className="relative flex flex-col lg:flex-row rounded-md  lg:rounded-l-md shadow-lg cursor-pointer mx-8">
+      
       {project.images.length > 0 ? 
           <div
           className="left w-full lg:w-3/5 h-48 lg:h-auto  rounded-t-md lg:rounded-r-none lg:rounded-b-none lg:rounded-l-md"
@@ -43,17 +40,11 @@ const FeaturedCard = ({project}) => {
           <div className="ml-3">
             <p className="text-sm leading-5 font-medium text-gray-900">
               <a href="#" className="hover:underline">
-                Abhinav
+                {project.user_id.name}
               </a>
             </p>
             <div className="flex text-sm leading-5 text-gray-500">
-              {/* <time dateTime={created_at}>{created_at}</time> */}
-              <span className="mx-1">&middot;</span>
-              <span>
-                5
-                {' '}
-                min read
-              </span>
+              {project.createDate && <time dateTime={project.createDate}>{project.createDate}</time>}
             </div>
           </div>
         </div>

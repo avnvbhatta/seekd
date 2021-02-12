@@ -22,34 +22,20 @@ const MyCarousel = ({images}) => {
     
     return (
         <>
-        <div className="flex items-center">
-            <button onClick={prev} className="relative bottom-10 h-8">
-                <svg className="w-8 h-8 text-blue-500 " xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-            </button>
-            <Carousel 
-                showThumbs={true}  
+        <Carousel 
                 infiniteLoop
                 selectedItem={currentSlide}
                 onChange={updateCurrentSlide}
                 showArrows={false}
-                
+                showThumbs={false}
             >
                 {images.map((image,idx) => {
-                    return <div className="rounded-lg" key={idx}>
+                    return <div key={idx}>
                             <img 
                             src={image} />
                         </div>
                 })}
             </Carousel>
-            <button onClick={next} className="relative bottom-10 h-8">
-                <svg className="w-8 h-8 text-blue-500 outline-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-            </button>
-        </div>
-        
         </>
         
 

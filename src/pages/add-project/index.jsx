@@ -229,7 +229,6 @@ const AddProject = () => {
                                         await wait(1000);
                                         try {
                                             const imageResponse = await uploadProjectImagesToS3(images[i].image);
-                                            console.log('imgResponse', imageResponse)
                                             s3ImgUrls.push(imageResponse.location);
                                         } catch (error) {
                                             console.log(error)

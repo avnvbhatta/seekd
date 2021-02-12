@@ -5,8 +5,6 @@ import { Link } from 'react-router-dom';
 import Avatar from "../../ui/Avatar";
 
 const Sidebar = () => {
-    console.log('rendered sidebar')
-
     const app = useRealmApp();
     const {user} = useContext(Context);
     
