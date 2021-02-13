@@ -20,14 +20,14 @@ const Card = ({user, project}) => {
             alt="feature_image"
           />
           :
-          <div className={`${getRandomGradient()} w-96 h-48 flex justify-center items-center`}>
+          <div className={`${getRandomGradient()} w-full h-48 flex justify-center items-center`}>
             <svg className="text-gray-50 h-24 w-24" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5" />
             </svg>
           </div>
         }
       </div>
-      <div className="flex-1 bg-white p-6 flex flex-col justify-between">
+      <div className="flex-1 w-96 bg-white p-6 flex flex-col justify-between">
         <div className="flex-1">
             <div className="block cursor-pointer">
               <h3 className="mt-2 text-xl leading-7 font-semibold text-gray-900">
@@ -44,13 +44,15 @@ const Card = ({user, project}) => {
               {user && user.img_url ? <img className="h-10 w-10 rounded-full" src={user.img_url} alt=""/> : <Avatar size={10}/>  }
             </div>
           </div>
-          <div className="ml-3">
-            <div className="text-sm leading-5 font-medium text-gray-900">
-              <p className="hover:underline">
-                {user.name}
-              </p>
+          <Link to={`/profile/${user.name}`}>
+            <div className="ml-3">
+              <div className="text-sm leading-5 font-medium text-gray-900">
+                <p className="hover:underline">
+                  {user.name}
+                </p>
+              </div>
             </div>
-          </div>
+          </Link>
         </div>
       </div>
     </div>

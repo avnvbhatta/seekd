@@ -21,8 +21,9 @@ const MyCarousel = ({images}) => {
     };
     
     return (
-        <>
-        <Carousel 
+        <div className="relative">
+            
+            <Carousel 
                 infiniteLoop
                 selectedItem={currentSlide}
                 onChange={updateCurrentSlide}
@@ -36,7 +37,18 @@ const MyCarousel = ({images}) => {
                         </div>
                 })}
             </Carousel>
-        </>
+            <button onClick={prev} className="top-1/2 left-8  absolute rounded-full bg-gray-200 hover:bg-white">
+                <svg className="w-6 h-6 lg:w-8 lg:h-8 text-blue-500 p-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+            </button>
+            <button onClick={next} className="top-1/2 right-8 absolute  rounded-full bg-gray-200 hover:bg-white">
+                <svg className="w-6 h-6  lg:w-8 lg:h-8 text-blue-500 p-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+            </button>
+
+        </div>
         
 
             

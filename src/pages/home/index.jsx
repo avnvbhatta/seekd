@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import FeaturedCard from '../../components/featured-card';
 import { useRealmApp } from "../../RealmApp"
 import { Context } from '../../contexts';
-import MyCarousel from '../../components/carousel';
 import { useQuery } from '@apollo/client';
 import queries from '../../graphql/queries';
 import LoadingSpinner from "../../components/loadingspinner"
@@ -26,7 +25,13 @@ const Home = () => {
           </h1>
 
           <div className="featured max-w-4xl mx-auto">
-            {loadingFeatured ? <LoadingSpinner size={16} color="text-blue-500" /> : <FeaturedCard project={featuredData.project}/> }
+            {loadingFeatured ? <LoadingSpinner size={16} color="text-blue-500" /> : 
+            
+              <Link to={`/projects/${featuredData.project.name}`}>
+                <FeaturedCard project={featuredData.project}/> 
+              </Link> 
+            
+            }
           </div>
 
           <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-4xl my-4 px-8">

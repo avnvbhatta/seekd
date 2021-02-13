@@ -26,7 +26,7 @@ const Project = () => {
                 <span className="inline">View</span>
                 <span className="text-blue-500 xl:inline">Project</span>
             </h1>
-            <div className="relative max-w-6xl flex flex-col justify-center items-center xl:items-stretch xl:flex-row rounded-md  xl:rounded-l-md cursor-pointer shadow-lg mx-8">
+            <div className="relative max-w-6xl flex flex-col justify-center items-center xl:items-stretch xl:flex-row rounded-md  xl:rounded-l-md  shadow-lg mx-8">
             {
                 data.project.images && data.project.images.length > 0 ? 
                 <div className="left xl:flex-grow  w-full relative h-48 md:h-96 xl:h-auto lg:mt-0  xl:rounded-l-md ">
@@ -54,14 +54,14 @@ const Project = () => {
                 </div>
                 <div className="mt-6 flex flex-col">
                     <div className="flex items-center">
-                        <a href="#">
+                        <div >
                             {data.project && data.project.user_id && data.project.user_id.img_url ? <img className="h-10 w-10 rounded-full" src={data.project.user_id.img_url} alt=""/> : <Avatar size={9}/>  }
-                        </a>
+                        </div>
                         <div className="ml-3">
                             <p className="text-sm leading-5 font-medium text-gray-900">
-                                <a href="#" className="hover:underline">
+                                <div className="hover:underline">
                                 {data.project.user_id.name}
-                                </a>
+                                </div>
                             </p>
                         </div>
                     </div>
@@ -78,12 +78,12 @@ const Project = () => {
                         </div>
                         <div className="flex flex-wrap mt-4">
                             {data.project.url && data.project.url.length > 0 &&
-                                <a href={`${data.project.url}`} target="_blank" className="w-full mb-2 md:mb-0 md:w-auto md:mr-2 flex justify-center py-4 px-6 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                <a href={`${data.project.url}`} target="_blank" className="w-full flex-grow mb-2 md:mb-0 md:w-auto md:mr-2 flex justify-center py-4 px-6 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                     View Demo
                                 </a>
                             }
                             {data.project.repository_url && data.project.repository_url.length > 0 &&
-                                <a href={`${data.project.repository_url}`} target="_blank" className="w-full mb-2 md:mb-0 md:w-auto md:mr-2 flex justify-center py-4 px-6 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                <a href={`${data.project.repository_url}`} target="_blank" className="w-full flex-grow mb-2 md:mb-0 md:w-auto md:mr-2 flex justify-center py-4 px-6 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                     View Code
                                 </a>
                             }
