@@ -23,7 +23,7 @@ const Projects = () => {
             
                 <div className="flex flex-wrap justify-center lg:justify-start">
                     {data.projects.map( (project,idx) => {
-                        return <Link to={`/profile/${project.name}`} key={idx}> 
+                        return <Link to={`/projects/${project.name}`} key={idx}> 
                                 <div className="md:mx-2 mb-4">
                                     <Card  project={project} user={project.user_id}/>
                                 </div>

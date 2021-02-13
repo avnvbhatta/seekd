@@ -21,36 +21,34 @@ const MyCarousel = ({images}) => {
     };
     
     return (
-        <>
-        <div className="flex items-center">
-            <button onClick={prev} className="relative bottom-10 h-8">
-                <svg className="w-8 h-8 text-blue-500 " xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-            </button>
+        <div className="relative">
+            
             <Carousel 
-                showThumbs={true}  
                 infiniteLoop
                 selectedItem={currentSlide}
                 onChange={updateCurrentSlide}
                 showArrows={false}
-                
+                showThumbs={false}
             >
                 {images.map((image,idx) => {
-                    return <div className="rounded-lg" key={idx}>
+                    return <div key={idx}>
                             <img 
                             src={image} />
                         </div>
                 })}
             </Carousel>
-            <button onClick={next} className="relative bottom-10 h-8">
-                <svg className="w-8 h-8 text-blue-500 outline-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <button onClick={prev} className="top-1/2 left-8  absolute rounded-full bg-gray-200 hover:bg-white">
+                <svg className="w-6 h-6 lg:w-8 lg:h-8 text-blue-500 p-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+            </button>
+            <button onClick={next} className="top-1/2 right-8 absolute  rounded-full bg-gray-200 hover:bg-white">
+                <svg className="w-6 h-6  lg:w-8 lg:h-8 text-blue-500 p-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
             </button>
+
         </div>
-        
-        </>
         
 
             

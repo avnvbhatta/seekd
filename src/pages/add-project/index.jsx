@@ -8,6 +8,8 @@ import mutations from "../../graphql/mutations";
 import { useMutation, useQuery } from '@apollo/client';
 import S3 from 'aws-s3';
 import queries from "../../graphql/queries";
+import Notification from "../../ui/Notification"
+import { Link } from 'react-router-dom';
 
 
 const AddProject = () => {
@@ -20,11 +22,13 @@ const AddProject = () => {
         variables: { query: {_id: id } }
     });
 
+
   
     const size1MB = 1024000;
 
     const [images, setImages] = useState([]);
     const [imagesError, setImagesError] = useState([]);
+    const [projectName, setProjectName] = useState('');
 
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
@@ -208,7 +212,7 @@ const AddProject = () => {
                                 },
                                 )
                             }
-                            onSubmit={async (values, { setSubmitting }) => {
+                            onSubmit={async (values, { setSubmitting, resetForm }) => {
                                 const _technologies = values.technologies.split(',').map(technology => technology = technology.trim().toLowerCase())
                                 let newProject = {...values}
 
@@ -225,7 +229,6 @@ const AddProject = () => {
                                         await wait(1000);
                                         try {
                                             const imageResponse = await uploadProjectImagesToS3(images[i].image);
-                                            console.log('imgResponse', imageResponse)
                                             s3ImgUrls.push(imageResponse.location);
                                         } catch (error) {
                                             console.log(error)
@@ -237,15 +240,15 @@ const AddProject = () => {
                                 try {
 
                                     await getS3URLs();
-                                    
-                                    newProject = {...values, technologies:_technologies, images: s3ImgUrls, user_id: {link: id}}
+                                    const currentDateTime = new Date().toISOString().replace('T', ' ').substring(0, 19);
+                                    newProject = {...values, technologies:_technologies, images: s3ImgUrls, user_id: {link: id}, createDate: currentDateTime}
                                     let createProjectResponse = await createProject({
                                         variables: {
                                             project: newProject,
                                         }
                                     });
-                                    console.log('newproj', newProject)
                                     const createdProjectID = createProjectResponse.data.insertOneProject._id;
+                                    setProjectName(values.name);
 
                                     let projectsArray = [];
                                     data.user.projects.forEach(project => projectsArray.push(project._id))
@@ -259,8 +262,11 @@ const AddProject = () => {
                                             }
                                         }
                                     });
-
-
+                                    
+                                    resetForm();
+                                    setImages([]);
+                                    setImagesError([]);
+                                    setProjectName('');
                                     setSuccess(true);
                                 } catch (error) {
                                     console.log(error)
@@ -303,15 +309,8 @@ const AddProject = () => {
                                                 </button>
                                             </div>
                                         </div>
-                                        {error ? 
-                                            <div className="pt-5">
-                                                <Alert 
-                                                type="error"
-                                                message="Oops. Something went wrong."
-                                                hide={() => setError(false)}
-                                                />
-                                            </div>
-                                        : null}
+                                        {success && <Notification title="Successfully created project!" type="success" > <Link to={`/projects/${projectName}`}>Click here to view.</Link></Notification>}
+                                        {error && <Notification title="Oops. Something went wrong." type="error" body={`An error occured. Please try again later.`}/>}
                                     </div>
                                 </Form>
                             )}

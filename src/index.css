@@ -12,11 +12,6 @@ code {
     monospace;
 }
 
-.carousel .thumbs-wrapper{
-  display:flex;
-  justify-content: center;
-}
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
