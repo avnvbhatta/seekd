@@ -1,10 +1,11 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import LoadingSpinner from '../loadingspinner';
 import Avatar from "../../ui/Avatar";
 import {getRandomGradient} from "../../utils/index"
+import { Link } from 'react-router-dom';
 
 const Card = ({user, project}) => {
+
 
   if(!user || !project){
     return <LoadingSpinner />
@@ -44,7 +45,7 @@ const Card = ({user, project}) => {
               {user && user.img_url ? <img className="h-10 w-10 rounded-full" src={user.img_url} alt=""/> : <Avatar size={10}/>  }
             </div>
           </div>
-          <Link to={`/profile/${user.name}`}>
+          <Link to={`/profile/${user._id}`}>
             <div className="ml-3">
               <div className="text-sm leading-5 font-medium text-gray-900">
                 <p className="hover:underline">

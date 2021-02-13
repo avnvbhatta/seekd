@@ -11,6 +11,7 @@ const GET_PROJECTS = gql`
         technologies
         url
         user_id {
+          _id
           name
           city
           img_url
@@ -32,6 +33,7 @@ query GetProjectByName($query: ProjectQueryInput!){
     technologies
     url
     user_id {
+      _id
       name
       img_url
     }
@@ -42,6 +44,7 @@ query GetProjectByName($query: ProjectQueryInput!){
 const GET_USERS = gql`
   query {
       users {
+        _id
        name
        info {
            bio
@@ -106,6 +109,7 @@ const GET_FEATURED_PROJECT = gql`
       technologies
       url
       user_id {
+        _id
         name
         img_url
       }

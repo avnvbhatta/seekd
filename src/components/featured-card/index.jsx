@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Avatar from '../../ui/Avatar';
 import {getRandomGradient} from "../../utils/index"
 
@@ -37,16 +38,18 @@ const FeaturedCard = ({project}) => {
               {project && project.user_id && project.user_id.img_url ? <img className="h-10 w-10 rounded-full" src={project.user_id.img_url} alt=""/> : <Avatar size={9}/>  }
             </div>
           </div>
-          <div className="ml-3">
-            <p className="text-sm leading-5 font-medium text-gray-900">
-              <div href="#" className="hover:underline">
-                {project.user_id.name}
+          <Link to={`/profile/${project.user_id._id}`}>
+            <div className="ml-3">
+              <div className="text-sm leading-5 font-medium text-gray-900">
+                <div className="hover:underline">
+                  {project.user_id.name}
+                </div>
               </div>
-            </p>
-            <div className="flex text-sm leading-5 text-gray-500">
-              {project.createDate && <time dateTime={project.createDate}>{project.createDate}</time>}
+              <div className="flex text-sm leading-5 text-gray-500">
+                {project.createDate && <time dateTime={project.createDate}>{project.createDate}</time>}
+              </div>
             </div>
-          </div>
+          </Link>
         </div>
       </div>
 

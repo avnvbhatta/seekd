@@ -44,7 +44,7 @@ function App() {
                           <WithContextRoute path="/projects"  component={Projects} />
                           <WithContextRoute path="/add-project"  component={AddProject}/>
                           <WithContextRoute path="/profile"  component={Profile}/>
-                          <WithContextRoute path="/profile/:userName" ><Profile /></WithContextRoute>
+                          <WithContextRoute path="/profile/:userName" component={Profile}/>
                       </Switch>
                     </div>
                   </div>
