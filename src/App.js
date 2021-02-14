@@ -36,7 +36,6 @@ function App() {
               <div className="h-full flex overflow-hidden bg-white flex-col lg:flex-row  mx-auto w-full">
                   <Sidebar />
                   <div className="flex flex-col w-full flex-1 overflow-hidden bg-gray-50">
-                    <div className="overflow-y-auto">
                       <Switch>
                           <WithContextRoute path="/" exact component={Gateway} />
                           <WithContextRoute path="/home"  component={Home} />
@@ -46,7 +45,6 @@ function App() {
                           <WithContextRoute path="/profile"  component={Profile}/>
                           <WithContextRoute path="/profile/:userName" component={Profile}/>
                       </Switch>
-                    </div>
                   </div>
                 </div>
             </div>

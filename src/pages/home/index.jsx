@@ -18,7 +18,7 @@ const Home = () => {
    
 
     return ( 
-        <div>
+        <div className="overflow-y-auto">
           <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-4xl my-4 px-8">
             <span className="inline">Featured</span>
             <span className="text-blue-500 xl:inline">Project</span>

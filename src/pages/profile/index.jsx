@@ -43,8 +43,8 @@ const Profile = () => {
             {
             Object.entries(currentUser).length < 1 ? <LoadingSpinner color="text-blue-500" size="16"/> 
             :
-            <div>
-                <div className="">
+            <div className="overflow-y-auto">
+                <div >
                 {currentUser && currentUser.cover_url ? 
                     <img className=" h-60 w-full object-cover" src={currentUser.cover_url} alt=""/> 
                     : 
