@@ -1,17 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import CardProjectMini from '../card-project-mini';
+import CardUserMini from '../card-user-mini';
 
-const Search = ({projects, setCurrentProject, searchedProjects, setSearchedProjects}) => {
+const Search = ({type, label, initial, setCurrent, searched, setSearched}) => {
 
 
     const handleChange = (e) => {
         let searchString = e.target.value; 
         if(searchString.length > 0){
-            const tempProjectsList = searchedProjects.filter(project => project.name.toLowerCase().includes(searchString));
-            setSearchedProjects(tempProjectsList);
+            const temp= searched.filter(searchItem => searchItem.name.toLowerCase().includes(searchString));
+            setSearched(temp);
         }
         else{
-            setSearchedProjects(projects);
+            setSearched(initial);
         }
     }
 
@@ -20,11 +21,11 @@ const Search = ({projects, setCurrentProject, searchedProjects, setSearchedProje
         <div className="hidden xl:order-first xl:flex xl:flex-col flex-shrink-0 w-96 border-r border-gray-200">
             <div className="px-6 pt-4 pb-4">
             <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-4xl mb-2 ">
-                <span className="inline">Projects</span>
+                <span className="inline">{label}</span>
                 <span className="text-blue-500 xl:inline">Directory</span>
             </h1>
             <p className="text-sm text-gray-600">
-                Search directory of  projects.
+                Search directory of {label.toLowerCase()}.
             </p>
             <div className="mt-3 flex space-x-4" >
                 <div className="flex-1 min-w-0">
@@ -41,9 +42,11 @@ const Search = ({projects, setCurrentProject, searchedProjects, setSearchedProje
             </div>
             </div>
             <nav className="flex-1 min-h-0 relative overflow-y-auto" aria-label="Directory">
-                <ul className="relative z-0 ">
-                    {searchedProjects.map((project,idx) => {
-                            return  <li key={idx} onClick={() => setCurrentProject(project)}><CardProjectMini project={project} /></li>
+                <ul className={`relative z-0 ${type === 'user' ? 'divide-y divide-gray-200' : ''} `}>
+                    {searched.map((searchedItem,idx) => {
+                            return  <li key={idx} onClick={() => {setCurrent(searchedItem); console.log(searchedItem)}}>
+                                    {type ==='project' ? <CardProjectMini project={searchedItem} /> : <CardUserMini user={searchedItem} />}
+                                </li>
                     })}
                 </ul>
             </nav>

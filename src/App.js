@@ -15,6 +15,7 @@ import {Provider} from "./contexts/"
 import Profile from './pages/profile';
 import WithContextRoute from './components/context-hoc';
 import Projects from './pages/projects';
+import Users from './pages/users';
 import Project from './pages/project';
 
 export const APP_ID = "showcase-ofqyl";
@@ -41,6 +42,7 @@ function App() {
                           <WithContextRoute path="/home"  component={Home} />
                           <WithContextRoute path="/projects/:project"  component={Project} />
                           <WithContextRoute path="/projects"  component={Projects} />
+                          <WithContextRoute path="/users"  component={Users} />
                           <WithContextRoute path="/add-project"  component={AddProject}/>
                           <WithContextRoute path="/profile"  component={Profile}/>
                           <WithContextRoute path="/profile/:userName" component={Profile}/>

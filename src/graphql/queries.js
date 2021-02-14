@@ -45,14 +45,29 @@ const GET_USERS = gql`
   query {
       users {
         _id
-       name
-       info {
-           bio
-       }
-       projects{
-           name
-           url
-       }
+        bio
+        city
+        country
+        cover_url
+        employer
+        facebook
+        img_url
+        instagram
+        linkedin
+        name
+        twitter
+        website
+        technologies
+        projects {
+          _id
+          name
+          description
+          likes
+          images
+          url
+          technologies
+          repository_url
+        }
     }
   }
 `;
