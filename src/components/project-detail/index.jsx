@@ -7,7 +7,7 @@ const ProjectDetail = ({project}) => {
 
     return (
         <div className="max-w-7xl w-full mx-auto overflow-y-auto">
-            <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-4xl mt-4 mx-8 mb-16">
+            <h1 className="hidden xl:block text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-4xl mt-4 mx-8 mb-16">
                 <span className="inline">View</span>
                 <span className="text-blue-500 xl:inline">Project</span>
             </h1>
@@ -31,7 +31,7 @@ const ProjectDetail = ({project}) => {
                     <span className="block xl:inline text-black">{project.name}</span>
                     </h1>
                     <h3 className="mt-2 text-xl leading-7 font-semibold text-gray-900 block lg:hidden">
-                    {project.description}
+                    {project.name}
                     </h3>
                     <p className="mt-3 text-base text-gray-500 ">
                     {project.description}

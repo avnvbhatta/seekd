@@ -26,14 +26,14 @@ const Users = () => {
     return ( 
         <div className="flex flex-col min-w-0 flex-1 overflow-hidden">
             
-            <div className="flex-1 relative z-0 flex overflow-hidden">
+            <div className="flex-1 relative z-0 flex overflow-hidden flex-col xl:flex-row">
             
                 {loading && <LoadingSpinner color="text-blue-500" size="16"/> }
                 {currentUser && users && <>
+                    <Search type="user" label="Users" initial={users} setCurrent={setCurrentUser} searched={searchedUsers} setSearched={setSearchedUsers}/>
                     <div className="flex-1 relative z-0 overflow-y-auto focus:outline-none xl:order-last" tabIndex="0">
                         <ProfileDetail user={currentUser} />
                     </div>
-                    <Search type="user" label="Users" initial={users} setCurrent={setCurrentUser} searched={searchedUsers} setSearched={setSearchedUsers}/>
                 </>}
             </div>
         </div>

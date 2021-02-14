@@ -8,7 +8,7 @@ const CardProjectMini = ({project}) => {
         return <LoadingSpinner color="text-blue-500"  size={16}/>
     }
     return ( 
-        <div className="flex flex-col pl-6 pr-2 mb-2 ">
+        <div className="flex flex-col xl:pl-6 xl:pr-2 mb-2 ">
             <div className="relative rounded-lg border border-gray-300 bg-white  shadow-sm flex items-center space-x-3 hover:border-gray-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
                 <div className="flex-shrink-0">
                     {project.images.length > 0 ? 

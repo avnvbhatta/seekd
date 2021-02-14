@@ -25,14 +25,14 @@ const Projects = () => {
     return ( 
         <div className="flex flex-col min-w-0 flex-1 overflow-hidden">
             
-            <div className="flex-1 relative z-0 flex overflow-hidden">
+            <div className="flex-1 relative z-0 flex overflow-hidden flex-col xl:flex-row ">
             
                 {loading && <LoadingSpinner color="text-blue-500" size="16"/> }
                 {currentProject && projects && <>
+                    <Search type="project" label="Projects" initial={projects} setCurrent={setCurrentProject} searched={searchedProjects} setSearched={setSearchedProjects}/>
                     <div className="flex-1 relative z-0 overflow-y-auto focus:outline-none xl:order-last" tabIndex="0">
                         <ProjectDetail  project={currentProject} />
                     </div>
-                    <Search type="project" label="Projects" initial={projects} setCurrent={setCurrentProject} searched={searchedProjects} setSearched={setSearchedProjects}/>
 
                 </>}
             </div>
