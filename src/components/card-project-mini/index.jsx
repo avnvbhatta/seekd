@@ -8,9 +8,9 @@ const CardProjectMini = ({project}) => {
         return <LoadingSpinner color="text-blue-500"  size={16}/>
     }
     return ( 
-        <div class="flex flex-col pl-6 pr-2 mb-2 ">
-            <div class="relative rounded-lg border border-gray-300 bg-white  shadow-sm flex items-center space-x-3 hover:border-gray-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                <div class="flex-shrink-0">
+        <div className="flex flex-col pl-6 pr-2 mb-2 ">
+            <div className="relative rounded-lg border border-gray-300 bg-white  shadow-sm flex items-center space-x-3 hover:border-gray-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                <div className="flex-shrink-0">
                     {project.images.length > 0 ? 
                         <img
                             className="h-16 w-24 rounded-l-md"
@@ -25,13 +25,13 @@ const CardProjectMini = ({project}) => {
                         </div>
                     }
                 </div>
-                <div class="flex-1 min-w-0">
-                <a href="#" class="focus:outline-none">
-                    <span class="absolute inset-0" aria-hidden="true"></span>
-                    <p class="text-md font-medium text-gray-900 truncate">
+                <div className="flex-1 min-w-0">
+                <a href="#" className="focus:outline-none">
+                    <span className="absolute inset-0" aria-hidden="true"></span>
+                    <p className="text-md font-medium text-gray-900 truncate">
                     {project.name}
                     </p>
-                    <p class="text-sm text-gray-500 truncate">
+                    <p className="text-sm text-gray-500 truncate">
                     {project.user_id.name}
                     </p>
                 </a>

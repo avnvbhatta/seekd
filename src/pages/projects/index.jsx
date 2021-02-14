@@ -9,11 +9,15 @@ const Projects = () => {
 
     const { loading, data } = useQuery(queries.GET_PROJECTS);
 
+    const [projects, setProjects] = useState(null)
+    const [searchedProjects, setSearchedProjects] = useState(null)
     const [currentProject, setCurrentProject] = useState(null)
 
 
     useEffect(() => {
         if(data && data.projects.length > 0){
+            setProjects(data.projects)
+            setSearchedProjects(data.projects)
             setCurrentProject(data.projects[0]);
         }
     }, [data])
@@ -24,11 +28,11 @@ const Projects = () => {
             <div className="flex-1 relative z-0 flex overflow-hidden">
             
                 {loading && <LoadingSpinner color="text-blue-500" size="16"/> }
-                {currentProject &&  <>
-                            <div className="flex-1 relative z-0 overflow-y-auto focus:outline-none xl:order-last" tabindex="0">
+                {currentProject && projects && <>
+                            <div className="flex-1 relative z-0 overflow-y-auto focus:outline-none xl:order-last" tabIndex="0">
                                 <ProjectDetail  project={currentProject} />
                             </div>
-                            <Search projects={[...data.projects, ...data.projects]} setCurrentProject={setCurrentProject}/>
+                            <Search projects={projects} setCurrentProject={setCurrentProject} searchedProjects={searchedProjects} setSearchedProjects={setSearchedProjects}/>
 
                         </>}
                 

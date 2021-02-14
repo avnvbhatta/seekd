@@ -4,7 +4,6 @@ import Avatar from '../../ui/Avatar';
 import {getRandomGradient} from "../../utils/"
 
 const ProjectDetail = ({project}) => {
-    console.log(project)
 
     return (
         <div className="max-w-7xl w-full mx-auto overflow-y-auto">
@@ -44,11 +43,11 @@ const ProjectDetail = ({project}) => {
                             {project && project.user_id && project.user_id.img_url ? <img className="h-10 w-10 rounded-full" src={project.user_id.img_url} alt=""/> : <Avatar size={9}/>  }
                         </div>
                         <div className="ml-3">
-                            <p className="text-sm leading-5 font-medium text-gray-900">
+                            <div className="text-sm leading-5 font-medium text-gray-900">
                                 <div className="hover:underline">
                                 {project.user_id.name}
                                 </div>
-                            </p>
+                            </div>
                         </div>
                     </div>
                     
