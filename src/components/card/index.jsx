@@ -3,6 +3,7 @@ import LoadingSpinner from '../loadingspinner';
 import Avatar from "../../ui/Avatar";
 import {getRandomGradient} from "../../utils/index"
 import { Link } from 'react-router-dom';
+import moment from "moment";
 
 const Card = ({user, project}) => {
 
@@ -51,6 +52,11 @@ const Card = ({user, project}) => {
                 <p className="hover:underline">
                   {user.name}
                 </p>
+                {
+                  project.createDate && <p className="text-xs text-gray-500">
+                    Uploaded {moment(project.createDate).fromNow()}
+                  </p>
+                }
               </div>
             </div>
           </Link>

@@ -18,6 +18,10 @@ const Sidebar = () => {
     
     const [showSidebar, setShowSidebar] = useState(false);
 
+    useEffect(() => {
+        console.log('user', user)
+    }, [])
+
     const Nav = () => {
         return <nav aria-label="Sidebar" className="mt-5">
         <div className="px-2 space-y-1">
@@ -69,13 +73,9 @@ const Sidebar = () => {
     </nav>
     }
 
-    useEffect(() => {
+   
 
-    },[user.name])
-
-    if(!user || !user.name){
-        return <div></div>
-    }
+    
     return ( 
         <>
             <div className="lg:hidden ">
@@ -191,6 +191,7 @@ const Sidebar = () => {
             </div>
         </div>
         </>
+        
      );
 }
  

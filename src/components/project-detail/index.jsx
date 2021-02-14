@@ -2,6 +2,7 @@ import React from 'react';
 import MyCarousel from '../../components/carousel';
 import Avatar from '../../ui/Avatar';
 import {getRandomGradient} from "../../utils/"
+import moment from "moment";
 
 const ProjectDetail = ({project}) => {
 
@@ -48,6 +49,11 @@ const ProjectDetail = ({project}) => {
                                 {project.user_id.name}
                                 </div>
                             </div>
+                            {
+                                project.createDate && <p className="text-xs text-gray-500">
+                                 {moment(project.createDate).fromNow()}
+                                </p>
+                            }
                         </div>
                     </div>
                     

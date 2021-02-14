@@ -10,12 +10,13 @@ import S3 from 'aws-s3';
 import queries from "../../graphql/queries";
 import Notification from "../../ui/Notification"
 import { Link } from 'react-router-dom';
+import {urlRegex} from "../../constants";
+import uniquid from "uniqid";
 
 
 const AddProject = () => {
     const app = useRealmApp();
     const id = app.currentUser.id;
-    const URL = /^((https?|ftp):\/\/)?(www.)?(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i
     const [createProject] = useMutation(mutations.CREATE_PROJECT);
     const [updateUserAddProject] = useMutation(mutations.UPDATE_USER_ADD_PROJECT);
     const { loading, data } = useQuery(queries.GET_CURRENT_PROJECTS, {
@@ -43,7 +44,7 @@ const AddProject = () => {
     const S3Client = new S3(config);
 
     const uploadProjectImagesToS3 = async (file) => {
-        const fileName = `project_image_${app.currentUser.id}`;
+        const fileName = `project_image_${app.currentUser.id}_${uniquid()}`;
         if(file){
             try {
                 return S3Client.uploadFile(file, fileName)
@@ -206,8 +207,8 @@ const AddProject = () => {
                                     technologies: Yup.string()
                                         .max(300, 'Technologies cannot exceed 300 characters') 
                                         .required('Required'),  
-                                    url: Yup.string().matches(URL, 'Invalid URL').required('Required'),
-                                    repository_url: Yup.string().matches(URL, 'Invalid URL'),                         
+                                    url: Yup.string().matches(urlRegex, 'Invalid URL').required('Required'),
+                                    repository_url: Yup.string().matches(urlRegex, 'Invalid URL'),                         
                                                                       
                                 },
                                 )
@@ -240,7 +241,7 @@ const AddProject = () => {
                                 try {
 
                                     await getS3URLs();
-                                    const currentDateTime = new Date().toISOString().replace('T', ' ').substring(0, 19);
+                                    const currentDateTime = new Date().toISOString();
                                     newProject = {...values, technologies:_technologies, images: s3ImgUrls, user_id: {link: id}, createDate: currentDateTime}
                                     let createProjectResponse = await createProject({
                                         variables: {
