@@ -13,7 +13,7 @@ const Card = ({user, project}) => {
   }
 
   return (
-    <div className="visible flex flex-col rounded-lg shadow-md overflow-hidden ">
+    <Link to={`projects/${project.name}`} className="visible flex flex-col rounded-lg shadow-md overflow-hidden ">
       <div className="flex-shrink-0" >
         {project.images.length > 0 ? 
           <img
@@ -62,7 +62,7 @@ const Card = ({user, project}) => {
           </Link>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

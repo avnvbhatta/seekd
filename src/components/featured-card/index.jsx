@@ -1,12 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Avatar from '../../ui/Avatar';
-import {getRandomGradient} from "../../utils/index"
+import {getRandomGradient} from "../../utils/index";
+
 
 const FeaturedCard = ({project}) => {
-  
   return (
-    <div className="relative flex flex-col lg:flex-row rounded-md  lg:rounded-l-md shadow-lg cursor-pointer mx-8">
+    <Link to={`/projects/${project.name}`} className="relative flex flex-col lg:flex-row rounded-md  lg:rounded-l-md shadow-lg cursor-pointer mx-8">
       
       {project.images.length > 0 ? 
           <div
@@ -26,7 +26,7 @@ const FeaturedCard = ({project}) => {
             <span className="block xl:inline text-black">{project.name}</span>
           </h1>
           <h3 className="mt-2 text-xl leading-7 font-semibold text-gray-900 block lg:hidden">
-            {project.description}
+            {project.name}
           </h3>
           <p className="mt-3 text-base text-gray-500 ">
             {project.description}
@@ -52,8 +52,7 @@ const FeaturedCard = ({project}) => {
           </Link>
         </div>
       </div>
-
-    </div>
+    </Link>
 
   );
 };

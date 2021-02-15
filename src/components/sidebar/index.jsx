@@ -19,7 +19,6 @@ const Sidebar = () => {
     const [showSidebar, setShowSidebar] = useState(false);
 
     useEffect(() => {
-        console.log('user', user)
     }, [])
 
     const Nav = () => {
