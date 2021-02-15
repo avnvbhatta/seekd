@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 import CardProjectMini from '../card-project-mini';
 import CardUserMini from '../card-user-mini';
 
-const Search = ({type, label, initial, setCurrent, searched, setSearched}) => {
+const Search = ({type, label, initial, setCurrent, searched, setSearched, showSearchResults, setShowSearchResults}) => {
 
-    const [showSearchResults, setShowSearchResults] = useState(false)
     const handleChange = (e) => {
         let searchString = e.target.value; 
         if(searchString.length > 0){
@@ -23,7 +22,7 @@ const Search = ({type, label, initial, setCurrent, searched, setSearched}) => {
     return ( 
         <div className="relative xl:flex xl:flex-col flex-shrink-0 w-full xl:w-96 border-r border-gray-200 ">
             <div className="px-6 pt-4 pb-4">
-            <h1 className="hidden xl:block text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-4xl mb-2 ">
+            <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-4xl mb-2 ">
                 <span className="inline">{label}</span>
                 <span className="text-blue-500 xl:inline">Directory</span>
             </h1>
@@ -51,10 +50,8 @@ const Search = ({type, label, initial, setCurrent, searched, setSearched}) => {
                 </ul>
             </nav>
             {showSearchResults && 
-            <nav className="flex flex-col shadow-lg xl:hidden min-h-0 max-h-60 absolute z-20 w-full  bg-gray-50 rounded-md px-6 pt-4 pb-4 mt-2 " aria-label="Directory">
-                <p className="text-sm text-gray-600">
-                    Search Results
-                </p>
+            <nav className="flex flex-col shadow-lg xl:hidden  relative z-20 w-full  bg-gray-50 rounded-md px-6 pb-4 " aria-label="Directory">
+                
                 <ul className={`relative z-0 w-full ${type === 'user' ? 'divide-y divide-gray-200' : ''} overflow-y-auto`}>
                     {searched.map((searchedItem,idx) => {
                             return  <li className="flex-grow-1" key={idx} onClick={() => {setCurrent(searchedItem); setShowSearchResults(false)}}>
@@ -62,7 +59,15 @@ const Search = ({type, label, initial, setCurrent, searched, setSearched}) => {
                                 </li>
                     })}
                 </ul>
+                <div className="lg:hidden text-center flex flex-col items-center text-md" onClick={() => setShowSearchResults(!showSearchResults)}>
+                    <svg className="w-5 h-5 text-blue-500 text-center" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                    </svg>
+                    <p>Hide </p>
+
+                </div>
             </nav>}
+            
         </div>
      );
 }
