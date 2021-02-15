@@ -10,6 +10,7 @@ import Projects from '../../pages/projects';
 import Users from '../../pages/users';
 import AddProject from '../../pages/add-project';
 import Profile from '../../pages/profile';
+import AlmostThere from '../../pages/almost-there';
 
 const MainApp = () => {
     return ( 
@@ -26,6 +27,7 @@ const MainApp = () => {
                         <Route path="/add-project"  component={AddProject}/>
                         <Route path="/profile"  component={Profile}/>
                         <Route path="/profile/:userName" component={Profile}/>
+                        <Route path="/edit-profile" component={AlmostThere}/>
                     </Switch>
                 </div>
             </div>
