@@ -10,6 +10,7 @@ const GET_PROJECTS = gql`
         repository_url
         technologies
         url
+        createDate
         user_id {
           _id
           name
@@ -25,6 +26,7 @@ const GET_PROJECTS = gql`
 const GET_PROJECT_BY_NAME =  gql`
 query GetProjectByName($query: ProjectQueryInput!){
   project(query: $query){
+    createDate
     description
     images
     likes
@@ -45,14 +47,31 @@ const GET_USERS = gql`
   query {
       users {
         _id
-       name
-       info {
-           bio
-       }
-       projects{
-           name
-           url
-       }
+        bio
+        city
+        country
+        cover_url
+        employer
+        facebook
+        img_url
+        instagram
+        linkedin
+        name
+        twitter
+        website
+        createDate
+        technologies
+        projects {
+          _id
+          name
+          description
+          likes
+          images
+          createDate
+          url
+          technologies
+          repository_url
+        }
     }
   }
 `;
@@ -67,6 +86,7 @@ const GET_USER = gql`
       cover_url
       employer
       facebook
+      createDate
       img_url
       instagram
       linkedin
@@ -83,6 +103,7 @@ const GET_USER = gql`
         url
         technologies
         repository_url
+        createDate
       }
     }
   }
@@ -108,6 +129,7 @@ const GET_FEATURED_PROJECT = gql`
       repository_url
       technologies
       url
+      createDate
       user_id {
         _id
         name

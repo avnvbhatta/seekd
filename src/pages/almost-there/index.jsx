@@ -1,22 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useRealmApp } from "../../RealmApp"
 import { Formik, Form, useField } from 'formik';
 import * as Yup from "yup";
 import S3 from 'aws-s3';
-import {countryList} from "../../constants"
+import {countryList, urlRegex} from "../../constants"
 import LoadingSpinner from '../../components/loadingspinner';
 import Home from "../home"
 import Alert from '../../ui/Alert';
 import mutations from "../../graphql/mutations";
 import { useMutation } from '@apollo/client';
+import uniquid from "uniqid";
+import Gateway from '../gateway';
+import MainApp from '../../components/main-app';
+import { Context } from '../../contexts';
 
 
 const AlmostThere = () => {
     const app = useRealmApp();
-    const URL = /^((https?|ftp):\/\/)?(www.)?(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i
 
     const id = app.currentUser.id;
     const email = app.currentUser._profile.data.email;
+
+    const {setUser} = useContext(Context);
     const [createUser] = useMutation(mutations.CREATE_USER);
    
     const config = {
@@ -74,7 +79,7 @@ const AlmostThere = () => {
     }
 
     const uploadImageToS3 = async (file, uploadType) => {
-        const fileName = `${uploadType === 'profile' ? 'profile_img_' : 'cover_img_'}${app.currentUser.id}`;
+        const fileName = `${uploadType === 'profile' ? 'profile_img_' : 'cover_img_'}${app.currentUser.id}_${uniquid()}`;
         if(file){
             try {
                 return S3Client.uploadFile(file, fileName)
@@ -281,11 +286,11 @@ const AlmostThere = () => {
       }
    
     useEffect(() => {
-
+        
     }, [success])
 
     if(success){
-        return <Home />
+        return <MainApp />
     }
  
     return ( 
@@ -339,18 +344,18 @@ const AlmostThere = () => {
                                         .required('Required'),
                                     technologies: Yup.string()
                                         .max(300, 'Technologies cannot exceed 300 characters'),
-                                    website: Yup.string().matches(URL, 'Invalid URL'),
-                                    facebook: Yup.string().matches(URL, 'Invalid URL'),
-                                    twitter: Yup.string().matches(URL, 'Invalid URL'),
-                                    instagram: Yup.string().matches(URL, 'Invalid URL'),
-                                    linkedin: Yup.string().matches(URL, 'Invalid URL'),
+                                    website: Yup.string().matches(urlRegex, 'Invalid URL'),
+                                    facebook: Yup.string().matches(urlRegex, 'Invalid URL'),
+                                    twitter: Yup.string().matches(urlRegex, 'Invalid URL'),
+                                    instagram: Yup.string().matches(urlRegex, 'Invalid URL'),
+                                    linkedin: Yup.string().matches(urlRegex, 'Invalid URL'),
                                 },
                                 )
                             }
                             onSubmit={async (values, { setSubmitting }) => {
                             //todo
                                 const _technologies = values.technologies.split(',').map(technology => technology = technology.trim().toLowerCase())
-                                const currentDateTime = new Date().toISOString().replace('T', ' ').substring(0, 19);
+                                const currentDateTime = new Date().toISOString();
                                 let formData = {...values, technologies: _technologies, projects: {link: []}, createDate: currentDateTime }
                                 try {
                                     const createUserResponse = await _createUser();
@@ -364,13 +369,13 @@ const AlmostThere = () => {
                                         formData = {...formData, cover_url: coverPicResponse.location}
                                     }
 
-                                    await createUserProfile({
+                                    const resp = await createUserProfile({
                                         variables: {
                                           query: { _id: app.currentUser.id },
                                           set: formData
                                         }
                                     });
-
+                                    setUser(resp.data.updateOneUser);
                                     setSuccess(true);
                                 } catch (error) {
                                     console.log(error)

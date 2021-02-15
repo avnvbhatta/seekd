@@ -11,8 +11,30 @@ const CREATE_USER = gql`
 const CREATE_USER_PROFILE = gql`
   mutation CreateUserProfile($query: UserQueryInput!, $set: UserUpdateInput!) {
     updateOneUser(query: $query, set: $set){
-        _id,
+      _id
+        bio
+        city
+        country
+        cover_url
+        employer
+        facebook
+        img_url
+        instagram
+        linkedin
         name
+        twitter
+        website
+        technologies
+        projects {
+        _id
+        name
+        description
+        likes
+        images
+        url
+        technologies
+        repository_url
+      }
     }
   }
 `;

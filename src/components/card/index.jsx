@@ -3,6 +3,7 @@ import LoadingSpinner from '../loadingspinner';
 import Avatar from "../../ui/Avatar";
 import {getRandomGradient} from "../../utils/index"
 import { Link } from 'react-router-dom';
+import moment from "moment";
 
 const Card = ({user, project}) => {
 
@@ -12,7 +13,7 @@ const Card = ({user, project}) => {
   }
 
   return (
-    <div className="visible flex flex-col rounded-lg shadow-md overflow-hidden min-w-xs max-w-xs lg:max-w-sm md:justify-center lg:justify-start">
+    <Link to={`projects/${project.name}`} className="visible flex flex-col rounded-lg shadow-md overflow-hidden ">
       <div className="flex-shrink-0" >
         {project.images.length > 0 ? 
           <img
@@ -28,7 +29,7 @@ const Card = ({user, project}) => {
           </div>
         }
       </div>
-      <div className="flex-1 w-96 bg-white p-6 flex flex-col justify-between">
+      <div className="flex-1 bg-white p-6 flex flex-col justify-between">
         <div className="flex-1">
             <div className="block cursor-pointer">
               <h3 className="mt-2 text-xl leading-7 font-semibold text-gray-900">
@@ -51,12 +52,17 @@ const Card = ({user, project}) => {
                 <p className="hover:underline">
                   {user.name}
                 </p>
+                {
+                  project.createDate && <p className="text-xs text-gray-500">
+                    Uploaded {moment(project.createDate).fromNow()}
+                  </p>
+                }
               </div>
             </div>
           </Link>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
