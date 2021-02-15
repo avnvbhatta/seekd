@@ -38,20 +38,14 @@ const Home = () => {
             <span className="inline">Recent</span>
             <span className="text-blue-500 xl:inline">Projects</span>
           </h1>
-          <div className="featured max-w-7xl mx-auto">
+          <div className="featured max-w-7xl mx-auto px-8">
             {loadingRecent ? <LoadingSpinner size={16} color="text-blue-500" /> : 
             
-              <div className="flex flex-wrap justify-center ">
-                {
-                    recentsData.projects.map((project,idx) => {
-                        return <Link to={`/projects/${project.name}`} key={idx}> 
-                            <div className="md:mx-2 mb-4">
-                                <Card project={project} user={project.user_id}/>
-                            </div>
-                        </Link>
-                    })
-                }
-                </div>
+            <div className="mt-12 max-w-lg mx-auto grid gap-5 lg:grid-cols-3 lg:max-w-none">
+              {recentsData.projects.map((project, idx) => {
+                return <Card project={project} key={idx} user={project.user_id}/>
+              })}
+            </div>
             }
           </div>
           <div className="relative mb-4">

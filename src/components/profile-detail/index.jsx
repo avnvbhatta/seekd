@@ -59,19 +59,13 @@ const ProfileDetail = ({user}) => {
                             <span className="inline">{`${user.name.split(" ")[0]}'s `}</span>
                             <span className="text-blue-500 xl:inline">Projects</span>
                         </h1>
-                        <div className="flex flex-wrap justify-center lg:justify-start">
-                            {
-                                user.projects.map((project,idx) => {
-                                    return <Link to={`/projects/${project.name}`} key={idx} > 
-                                        <div className="md:mx-2 mb-4">
-                                            <Card  project={project} user={user}/>
-                                        </div>
-                                    </Link>
-                                })
-                            }
+                        <div className="max-w-7xl mx-auto">
+                            <div className="mt-12 max-w-lg mx-auto grid gap-5 lg:grid-cols-3 lg:max-w-none">
+                                {user.projects.map((project, idx) => {
+                                    return <Card project={project} key={idx} user={user}/>
+                                })}
+                            </div>
                         </div>
-                        
-                    
                     </div>
                 </div>
                 </div>
