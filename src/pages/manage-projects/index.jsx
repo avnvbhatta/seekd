@@ -1,11 +1,63 @@
-import React, { useContext, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from 'react';
 import Card from '../../components/card';
 import { Context } from '../../contexts';
+import mutations from "../../graphql/mutations";
+import { useMutation } from '@apollo/client';
+import { useRealmApp } from "../../RealmApp";
+import Notification from  "../../ui/Notification";
 
 const ManageProjects = () => {
 
     const {user} = useContext(Context);
+    const app = useRealmApp();
+    const id = app.currentUser.id;
+
+    const [showDeleteAlert, setShowDeleteAlert] = useState(false);
+    const [deletingStatus, setDeletingStatus] = useState(false);
+    const [deleteSuccess, setDeleteSuccess] = useState(false);
+    const [deleteError, setDeleteError] = useState(false);
+    const [updateUserProjectArray] = useMutation(mutations.UPDATE_USER_PROJECT_ARRAY);
+    const [deleteUserProject] = useMutation(mutations.DELETE_PROJECT);
+
+    const deleteProject = async (project_id) => {
+        setDeletingStatus(true)
+        try{
+            const deleteUserProjectResponse = await deleteUserProject({
+                variables: {
+                  query: {
+                    _id: project_id
+                  }
+                }
+              });
+
+
+            const updateUserProjectArrayResponse = await updateUserProjectArray({
+                variables: {
+                  input: {
+                    project_id: project_id,
+                    user_id: id
+                  }
+                }
+              });
+              setDeleteSuccess(true);
+              console.log(updateUserProjectArrayResponse)
+
+        }
+        catch(err){
+            console.log(err);
+            setDeleteError(true);
+
+        }
+        setDeletingStatus(false);
+        setShowDeleteAlert(false);
+
+      }
+    
+      useEffect(() => {
+        console.log('rendered')
+        console.log('success', deleteSuccess)
+        console.log('err', deleteError)
+      }, [deleteSuccess, deleteError])
 
     useEffect(() => {
 
@@ -26,7 +78,17 @@ const ManageProjects = () => {
                 <div className="max-w-7xl mx-auto">
                     <div className="mt-12 max-w-lg mx-auto grid gap-5 lg:grid-cols-3 lg:max-w-none relative">
                         {user.projects.map((project, idx) => {
-                            return <Card manage={true} project={project} key={idx} user={user}/>
+                            return <Card 
+                                    manage={true} 
+                                    project={project} 
+                                    key={idx} 
+                                    user={user} 
+                                    showDeleteAlert={showDeleteAlert}
+                                    setShowDeleteAlert={setShowDeleteAlert}
+                                    deleteProject={deleteProject}
+                                    deletingStatus={deletingStatus}
+                                    
+                                />
                         })}
                     </div>
                 </div>
@@ -43,8 +105,13 @@ const ManageProjects = () => {
                 </p>   
             </div>
         }
+
+            {deleteSuccess  && <Notification title="Successfully deleted project." type="success" ></Notification>}
+            {deleteError  && <Notification title="Something went wrong." body="Please try again later." type="error" ></Notification>}
         
-    
+        
+        
+        
     </div>
     );
 }

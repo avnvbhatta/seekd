@@ -9,6 +9,8 @@ const ProfileDetail = ({user}) => {
     const app = useRealmApp();
     const id = app.currentUser.id;
 
+    console.log(user)
+
     return ( 
         <div className="overflow-y-auto">
                 <div >

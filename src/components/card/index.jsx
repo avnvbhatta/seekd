@@ -1,19 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import LoadingSpinner from '../loadingspinner';
 import Avatar from "../../ui/Avatar";
 import {getRandomGradient} from "../../utils/index"
 import { Link } from 'react-router-dom';
 import moment from "moment";
+import Delete from '../delete';
 
-const Card = ({user, project, manage}) => {
-
+const Card = ({user, project, manage, deleteProject, deletingStatus, showDeleteAlert, setShowDeleteAlert}) => {
+  
 
   if(!user || !project){
     return <LoadingSpinner />
   }
 
   return (
-    <Link to={`projects/${project.name}`} className="visible flex flex-col rounded-lg shadow-md overflow-hidden ">
+    <div to={`projects/${project.name}`} className="visible flex flex-col rounded-lg shadow-md overflow-hidden ">
       <div className="flex-shrink-0" >
         {project.images.length > 0 ? 
           <img
@@ -40,7 +41,7 @@ const Card = ({user, project, manage}) => {
                   <Link  to={{pathname: `/manage-projects/${project.name}`, state: project}} className="inline-flex items-center text-md leading-4 font-medium rounded-md text-blue-500 hover:underline">
                     Edit
                   </Link>
-                  <button type="button" className="inline-flex items-center text-md leading-4 font-medium rounded-md text-red-500  hover:underline ml-2">
+                  <button type="button" onClick={() => setShowDeleteAlert(true)} className="inline-flex items-center text-md leading-4 font-medium rounded-md text-red-500  hover:underline ml-2">
                     Delete
                   </button>
                 </div>}
@@ -71,9 +72,21 @@ const Card = ({user, project, manage}) => {
               </div>
             </div>
           </Link>
+          {manage && showDeleteAlert && 
+            <Delete title={`Delete ${project.name}?`} 
+                body="Are you sure you want to delete this project? This action cannot be undone." 
+                buttonLabel="Delete Project"
+                deleteId={project._id}
+                onDelete={deleteProject}
+                onCancel={setShowDeleteAlert}
+                isDeleting={deletingStatus} 
+
+            />
+        }
         </div>
+        
       </div>
-    </Link>
+    </div>
   );
 };
 
