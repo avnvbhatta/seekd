@@ -11,6 +11,8 @@ import Users from '../../pages/users';
 import AddProject from '../../pages/add-project';
 import Profile from '../../pages/profile';
 import AlmostThere from '../../pages/almost-there';
+import ManageProjects from '../../pages/manage-projects';
+import WithContextRoute from "../context-hoc"
 
 const MainApp = () => {
     return ( 
@@ -25,6 +27,8 @@ const MainApp = () => {
                         <Route path="/projects"  component={Projects} />
                         <Route path="/users"  component={Users} />
                         <Route path="/add-project"  component={AddProject}/>
+                        <Route path="/manage-projects/:project"  component={AddProject}/>
+                        <Route path="/manage-projects"  component={ManageProjects}/>
                         <Route path="/profile"  component={Profile}/>
                         <Route path="/profile/:userName" component={Profile}/>
                         <Route path="/edit-profile" component={AlmostThere}/>

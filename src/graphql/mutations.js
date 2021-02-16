@@ -56,4 +56,12 @@ const UPDATE_USER_ADD_PROJECT = gql`
   }
 `;
 
-export default {CREATE_USER, CREATE_USER_PROFILE, CREATE_PROJECT, UPDATE_USER_ADD_PROJECT}
+const UPDATE_PROJECT = gql`
+  mutation UpdateUserAddProject($query: ProjectQueryInput!, $set: ProjectUpdateInput!) {
+    updateOneProject(query: $query, set: $set){
+        _id,
+        name
+    }
+  }
+`;
+export default {CREATE_USER, CREATE_USER_PROFILE, CREATE_PROJECT, UPDATE_USER_ADD_PROJECT, UPDATE_PROJECT}

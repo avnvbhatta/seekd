@@ -12,10 +12,10 @@ const ProjectDetail = ({project}) => {
                 <span className="inline">View</span>
                 <span className="text-blue-500 xl:inline">Project</span>
             </h1>
-            <div className="relative max-w-6xl flex flex-col justify-center items-center xl:items-stretch xl:flex-row rounded-md  xl:rounded-l-md  shadow-lg mx-8">
+            <div className="relative max-w-6xl flex flex-col justify-center items-center xl:items-stretch xl:flex-row rounded-md  xl:rounded-l-md  shadow-lg mx-8 overflow-hidden">
             {
-                project.images && project.images.length > 0 ? 
-                <div className="left xl:flex-grow  w-full relative h-48 md:h-96 xl:h-auto lg:mt-0  xl:rounded-l-md ">
+                project && project.images && project.images.length > 0 ? 
+                <div className="left xl:flex-grow  w-full relative h-48 max-h-96 xl:h-auto lg:mt-0  xl:rounded-l-md ">
                     <MyCarousel images={project.images}/>
                 </div>
                 :
