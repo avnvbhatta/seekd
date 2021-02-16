@@ -5,7 +5,7 @@ import {getRandomGradient} from "../../utils/index"
 import { Link } from 'react-router-dom';
 import moment from "moment";
 
-const Card = ({user, project}) => {
+const Card = ({user, project, manage}) => {
 
 
   if(!user || !project){
@@ -32,9 +32,20 @@ const Card = ({user, project}) => {
       <div className="flex-1 bg-white p-6 flex flex-col justify-between">
         <div className="flex-1">
             <div className="block cursor-pointer">
-              <h3 className="mt-2 text-xl leading-7 font-semibold text-gray-900">
-                {project.name}
-              </h3>
+              <div className="flex flex-row justify-between items-center">
+                <h3 className="text-xl leading-7 font-semibold text-gray-900 flex flex-row">
+                  {project.name}
+                </h3>
+                {manage && <div className="flex flex-row">
+                  <Link  to={{pathname: `/manage-projects/${project.name}`, state: project}} className="inline-flex items-center text-md leading-4 font-medium rounded-md text-blue-500 hover:underline">
+                    Edit
+                  </Link>
+                  <button type="button" className="inline-flex items-center text-md leading-4 font-medium rounded-md text-red-500  hover:underline ml-2">
+                    Delete
+                  </button>
+                </div>}
+              </div>
+              
               <p className="mt-3 text-base leading-6 text-gray-500">
                 {project.description}
               </p>

@@ -14,11 +14,12 @@ import {urlRegex} from "../../constants";
 import uniquid from "uniqid";
 
 
-const AddProject = () => {
+const AddProject = (props) => {
     const app = useRealmApp();
     const id = app.currentUser.id;
     const [createProject] = useMutation(mutations.CREATE_PROJECT);
     const [updateUserAddProject] = useMutation(mutations.UPDATE_USER_ADD_PROJECT);
+    const [updateProject] = useMutation(mutations.UPDATE_PROJECT);
     const { loading, data } = useQuery(queries.GET_CURRENT_PROJECTS, {
         variables: { query: {_id: id } }
     });
@@ -30,6 +31,8 @@ const AddProject = () => {
     const [images, setImages] = useState([]);
     const [imagesError, setImagesError] = useState([]);
     const [projectName, setProjectName] = useState('');
+    const [projectDataLoading, setProjectDataLoading] = useState(true);
+    const [imagesNeedUpdate, setImagesNeedUpdate] = useState(false);
 
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
@@ -42,6 +45,45 @@ const AddProject = () => {
         secretAccessKey: process.env.REACT_APP_S3_ACCESS_SECRET_KEY,
     }
     const S3Client = new S3(config);
+
+    
+    const _initialValues =  {
+        name: '',
+        description: '',
+        images: [],
+        technologies: '',
+        url: '',
+        repository_url: '',
+        likes: 0,
+        user_id: id                                  
+    }
+    const [projectData, setProjectData] = useState(props && props.location && props.location.state ? props.location.state : null)
+    const [initialValues, setInitialValues] = useState(_initialValues)
+
+
+    useEffect(() => {
+        if(projectData){
+            setInitialValues({
+                name: projectData.name,
+                description: projectData.description,
+                technologies: projectData.technologies.join(", "),
+                url: projectData.url,
+                repository_url: projectData.repository_url,
+                likes: 0,
+                user_id: id      
+            })
+            let _images = [];
+            projectData && projectData.images.forEach((image,id) => {
+                _images.push({id:id, fileName:`${id}.jpg`, url: image, isPhysicalFile: false});
+            })
+            setImages(_images)
+            setProjectDataLoading(false);
+        }
+        else{
+            setProjectDataLoading(false);
+        }
+    }, [])
+
 
     const uploadProjectImagesToS3 = async (file) => {
         const fileName = `project_image_${app.currentUser.id}_${uniquid()}`;
@@ -69,18 +111,21 @@ const AddProject = () => {
                 errors.push(`${files[i].name} failed to upload. Please make sure file is less than 1MB`);
             }
             else{
-                _images.push({fileName: files[i].name, image: files[i], url: window.URL.createObjectURL(files[i])});
+                _images.push({fileName: files[i].name, image: files[i], url: window.URL.createObjectURL(files[i]), isPhysicalFile: true});
             }
         }
       
         setImagesError(errors);
         setImages(prev => [...prev, ..._images]);
+        setImagesNeedUpdate(true);
+        
 
     }
 
     const deleteImg = (fileName) => {
         let _images = images.filter(image => image.fileName !== fileName);
         setImages(_images);
+        setImagesNeedUpdate(true)
     }
 
     const MyTextInput = ({ label, type, ...props }) => {
@@ -177,22 +222,13 @@ const AddProject = () => {
 
     return ( 
         <>
+            {projectDataLoading ? <LoadingSpinner color="text-blue-500" size={16}/>
+            :
             <div className="min-h-screen bg-gray-50 flex flex-col pb-12 sm:px-6 lg:px-8 relative overflow-y-auto">
                 <div className="mt-8 mx-auto w-full max-w-2xl">
                     <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
                         <Formik
-                            initialValues= {
-                                {
-                                    name: '',
-                                    description: '',
-                                    images: [],
-                                    technologies: '',
-                                    url: '',
-                                    repository_url: '',
-                                    likes: 0,
-                                    user_id: id                                  
-                                }
-                            }
+                            initialValues= {initialValues}
                             validationSchema = {
                                 
                                 Yup.object({
@@ -223,14 +259,24 @@ const AddProject = () => {
                                     (resolve, reject) => setTimeout(resolve, ms)
                                 );
                                 let s3ImgUrls = [];
+                                if(projectData){
+                                    images.forEach(image => {
+                                        if(!image.isPhysicalFile){
+                                            s3ImgUrls.push(image.url)
+                                        }
+                                    });
+                                }
 
                                 const getS3URLs = async () => {
 
                                     for(let i=0; i< images.length; i++){
                                         await wait(1000);
                                         try {
-                                            const imageResponse = await uploadProjectImagesToS3(images[i].image);
-                                            s3ImgUrls.push(imageResponse.location);
+                                            if(images[i].isPhysicalFile){
+                                                console.log('uploading', images[i])
+                                                const imageResponse = await uploadProjectImagesToS3(images[i].image);
+                                                s3ImgUrls.push(imageResponse.location);
+                                            }
                                         } catch (error) {
                                             console.log(error)
                                         }
@@ -239,35 +285,62 @@ const AddProject = () => {
 
 
                                 try {
+                                    console.log('s3urls before', s3ImgUrls);
 
-                                    await getS3URLs();
+                                    if(images && imagesNeedUpdate){
+                                        await getS3URLs();
+                                    }
                                     const currentDateTime = new Date().toISOString();
+                                    console.log('s3urls after', s3ImgUrls);
                                     newProject = {...values, technologies:_technologies, images: s3ImgUrls, user_id: {link: id}, createDate: currentDateTime}
-                                    let createProjectResponse = await createProject({
-                                        variables: {
-                                            project: newProject,
-                                        }
-                                    });
-                                    const createdProjectID = createProjectResponse.data.insertOneProject._id;
-                                    setProjectName(values.name);
-
-                                    let projectsArray = [];
-                                    data.user.projects.forEach(project => projectsArray.push(project._id))
-                                    const updateResponse = await updateUserAddProject({
-                                        variables: {
-                                            query: { _id: id },
-                                            set: {
-                                               projects: {
-                                                   link: [...projectsArray, createdProjectID]
-                                               } 
-                                            }
-                                        }
-                                    });
                                     
-                                    resetForm();
-                                    setImages([]);
-                                    setImagesError([]);
-                                    setProjectName('');
+                                    if(!projectData){
+                                        let createProjectResponse = await createProject({
+                                            variables: {
+                                                project: newProject,
+                                            }
+                                        });
+                                        const createdProjectID = createProjectResponse.data.insertOneProject._id;
+                                        setProjectName(values.name);
+    
+                                        let projectsArray = [];
+                                        data.user.projects.forEach(project => projectsArray.push(project._id))
+                                        const updateResponse = await updateUserAddProject({
+                                            variables: {
+                                                query: { _id: id },
+                                                set: {
+                                                   projects: {
+                                                       link: [...projectsArray, createdProjectID]
+                                                   } 
+                                                }
+                                            }
+                                        });
+                                    }
+                                    else{
+                                        const updateResponse = await updateProject({
+                                            variables: {
+                                                query: { _id: projectData._id },
+                                                set: {
+                                                   name: newProject.name,
+                                                   description: newProject.description,
+                                                   url: newProject.url,
+                                                   repository_url: newProject.repository_url,
+                                                   technologies: newProject.technologies,
+                                                   images: newProject.images
+
+                                                }
+                                            }
+                                        });
+                                        console.log(updateResponse)
+                                        setProjectName(updateResponse.data.updateOneProject.name);
+
+                                    }
+                                    if(!projectData){
+                                        resetForm();
+                                        setImages([]);
+                                        setImagesError([]);
+                                        setProjectName('');
+                                    }
                                     setSuccess(true);
                                 } catch (error) {
                                     console.log(error)
@@ -284,10 +357,10 @@ const AddProject = () => {
                                         <div className="space-y-8 divide-y divide-gray-200 sm:space-y-5">
                                             <div>
                                                 <h3 className="text-lg leading-6 font-medium text-gray-900">
-                                                Add Project
+                                                    {projectData ? 'Edit Project' : 'Add Project'}
                                                 </h3>
                                                 <p className="mt-1 max-w-2xl text-sm text-gray-500">
-                                                Please tell us a bit more about your project
+                                                    {projectData ? '' : 'Please tell us a bit more about yourself.'}
                                                 </p>
                                             </div>
                                             <div className="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
@@ -305,12 +378,14 @@ const AddProject = () => {
                                                 <button type="submit" className="w-20 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                                     {formik.isSubmitting ? <LoadingSpinner color="white"/> : 'Save'}
                                                 </button>
-                                                <button type="button" className="ml-3 bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                                    Cancel
-                                                </button>
+                                                <Link to="/manage-projects">
+                                                    <button type="button" className="ml-3 bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                        Cancel
+                                                    </button>
+                                                </Link> 
                                             </div>
                                         </div>
-                                        {success && <Notification title="Successfully created project!" type="success" > <Link to={`/projects/${projectName}`}>Click here to view.</Link></Notification>}
+                                        {success && <Notification title={`Successfully ${projectData ? 'updated' : 'created'} project!`} type="success" > <Link to={`/projects/${projectName}`}>Click here to view.</Link></Notification>}
                                         {error && <Notification title="Oops. Something went wrong." type="error" body={`An error occured. Please try again later.`}/>}
                                     </div>
                                 </Form>
@@ -319,6 +394,7 @@ const AddProject = () => {
                     </div>
                 </div>
             </div>
+    }
         </>
      );
 }

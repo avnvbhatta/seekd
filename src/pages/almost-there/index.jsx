@@ -13,9 +13,11 @@ import uniquid from "uniqid";
 import Gateway from '../gateway';
 import MainApp from '../../components/main-app';
 import { Context } from '../../contexts';
+import Notification from '../../ui/Notification';
+import { Link } from 'react-router-dom';
 
 
-const AlmostThere = () => {
+const AlmostThere = (props) => {
     const app = useRealmApp();
 
     const id = app.currentUser.id;
@@ -37,14 +39,63 @@ const AlmostThere = () => {
 
     const [profilePic, setProfilePic] = useState(null);
     const [coverPic, setCoverPic] = useState(null);
+    const [profilePicNeedsUpdate, setProfilePicNeedsUpdate] = useState(false);
+    const [coverPicNeedsUpdate, setCoverPicNeedsUpdate] = useState(false);
     const [imgError, setImgError] = useState(false);
     const [coverImgError, setCoverImgError] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const [createUserProfile] = useMutation(mutations.CREATE_USER_PROFILE);
 
 
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
+
+    const _initialValues = {
+        name: '',
+        city: '',
+        country: '',
+        img_url: '',
+        cover_url: '',
+        bio: '',
+        employer: '',
+        technologies: '',
+        website: '',
+        linkedin: '',
+        twitter: '',
+        instagram: '',
+        facebook: ''
+    }
+
+    const [userData, setUserData] = useState(props && props.location && props.location.state ? props.location.state : null)
+    const [initialValues, setInitialValues] = useState(_initialValues)
+
+  
+    useEffect(() => {
+        if(userData){
+            setInitialValues({
+                name: userData.name,
+                city: userData.city,
+                country: userData.country,
+                img_url: userData.img_url,
+                cover_url: userData.cover_url,
+                bio: userData.bio,
+                employer: userData.employer,
+                technologies: userData.technologies.join(", "),
+                website: userData.website,
+                linkedin: userData.linkedin,
+                twitter: userData.twitter,
+                instagram: userData.instagram,
+                facebook: userData.facebook
+            })
+            setProfilePic(userData.img_url ? {url: userData.img_url} : null);
+            setCoverPic(userData.cover_url ? {url: userData.cover_url} : null);
+            setLoading(false);
+        }
+        else{
+            setLoading(false);
+        }
+    }, [])
 
     const _createUser = async () => {
         const newUser = {
@@ -66,6 +117,7 @@ const AlmostThere = () => {
             }
             else{
                 setProfilePic({fileName: e.target.files[0], url: window.URL.createObjectURL(e.target.files[0])})
+                setProfilePicNeedsUpdate(true);
             }
         }
         else{
@@ -74,6 +126,7 @@ const AlmostThere = () => {
             }
             else{
                 setCoverPic({fileName: e.target.files[0], url: window.URL.createObjectURL(e.target.files[0])})
+                setCoverPicNeedsUpdate(true)
             }
         }
     }
@@ -290,35 +343,25 @@ const AlmostThere = () => {
     }, [success])
 
     if(success){
-        return <MainApp />
+        if(!userData){
+            return <MainApp />
+        }
     }
  
     return ( 
         <>
-            <div className="min-h-screen bg-gray-50 flex flex-col pb-12 sm:px-6 lg:px-8 relative">
-                <button type="button" onClick={() => logOut()} className="absolute inset y-0 right-0 cursor-pointer inline-flex items-center px-4 py-2 m-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            {loading ? <LoadingSpinner color="text-blue-500" size={16}/>
+            
+            :
+        
+            <div className="min-h-screen bg-gray-50 flex flex-col pb-12 sm:px-6 lg:px-8 relative overflow-y-auto">
+                {userData ? null : <button type="button" onClick={() => logOut()} className="absolute inset y-0 right-0 cursor-pointer inline-flex items-center px-4 py-2 m-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                     Sign Out
-                </button>
+                </button>}
                 <div className="mt-8 mx-auto w-full max-w-2xl">
                     <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
                         <Formik
-                            initialValues= {
-                                {
-                                name: '',
-                                city: '',
-                                country: '',
-                                img_url: '',
-                                cover_url: '',
-                                bio: '',
-                                employer: '',
-                                technologies: '',
-                                website: '',
-                                linkedin: '',
-                                twitter: '',
-                                instagram: '',
-                                facebook: ''
-                                }
-                            }
+                            initialValues= {initialValues}
                             validationSchema = {
                                 
                                 Yup.object({
@@ -358,13 +401,16 @@ const AlmostThere = () => {
                                 const currentDateTime = new Date().toISOString();
                                 let formData = {...values, technologies: _technologies, projects: {link: []}, createDate: currentDateTime }
                                 try {
-                                    const createUserResponse = await _createUser();
+                                    
+                                    if(!userData){
+                                        const createUserResponse = await _createUser();
+                                    }
 
-                                    if(profilePic){
+                                    if(profilePic && profilePicNeedsUpdate){
                                         const profilePicResponse = await uploadImageToS3(profilePic.fileName, 'profile');
                                         formData = {...formData, img_url: profilePicResponse.location}
                                     }
-                                    if(coverPic){
+                                    if(coverPic && coverPicNeedsUpdate){
                                         const coverPicResponse = await uploadImageToS3(coverPic.fileName, 'cover');
                                         formData = {...formData, cover_url: coverPicResponse.location}
                                     }
@@ -393,10 +439,10 @@ const AlmostThere = () => {
                                         <div className="space-y-8 divide-y divide-gray-200 sm:space-y-5">
                                             <div>
                                                 <h3 className="text-lg leading-6 font-medium text-gray-900">
-                                                Almost There!
+                                                    {userData ? 'Edit Profile' : 'Almost There!'}
                                                 </h3>
                                                 <p className="mt-1 max-w-2xl text-sm text-gray-500">
-                                                Please tell us a bit more about yourself
+                                                    {userData ? '' : 'Please tell us a bit more about yourself.'}
                                                 </p>
                                             </div>
                                             <div className="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
@@ -417,20 +463,17 @@ const AlmostThere = () => {
                                                 <button type="submit" className="w-20 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                                     {formik.isSubmitting ? <LoadingSpinner color="white"/> : 'Save'}
                                                 </button>
-                                                <button type="button" className="ml-3 bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                                    Cancel
-                                                </button>
+                                                <Link to="/profile">
+                                                    <button type="button" className="ml-3 bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                        Cancel
+                                                    </button>
+                                                </Link> 
                                             </div>
                                         </div>
-                                        {error ? 
-                                            <div className="pt-5">
-                                                <Alert 
-                                                type="error"
-                                                message="Oops. Something went wrong."
-                                                hide={() => setError(false)}
-                                                />
-                                            </div>
-                                        : null}
+                                        
+                                        {success && userData && <Notification title="Successfully updated profile!" type="success" > <Link to={`/profile`}>Click here to view updated profile.</Link></Notification>}
+                                        {error && <Notification title="Oops. Something went wrong." type="error" body={`An error occured. Please try again later.`}/>}
+                                    
                                     </div>
                                 </Form>
                             )}
@@ -438,6 +481,7 @@ const AlmostThere = () => {
                     </div>
                 </div>
             </div>
+            }
         </>
      );
 }
