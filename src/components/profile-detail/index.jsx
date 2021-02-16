@@ -2,8 +2,13 @@ import React from 'react';
 import Avatar from "../../ui/Avatar";
 import Card from '../../components/card';
 import { Link } from 'react-router-dom';
+import { useRealmApp } from "../../RealmApp"
 
 const ProfileDetail = ({user}) => {
+
+    const app = useRealmApp();
+    const id = app.currentUser.id;
+
     return ( 
         <div className="overflow-y-auto">
                 <div >
@@ -16,7 +21,8 @@ const ProfileDetail = ({user}) => {
                 <div className="flex flex-col justify-items-start">
                     <div className="flex justify-between items-end">
                         {user && user.img_url ? <img className="h-36 w-36 rounded-full ring-8 ring-white sm:h-36 sm:w-36" src={user.img_url} alt=""/> : <Avatar size={36}/>  }
-                        <Link to={{pathname: 'edit-profile', state: user}}>
+                        { user._id === id?
+                            <Link to={{pathname: 'edit-profile', state: user}}>
                             <button type="button" class="inline-flex items-center h-10 px-6 py-3 border border-transparent shadow-sm text-base font-medium rounded-md text-white bg-blue-500 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                 <svg  class="-ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -24,6 +30,8 @@ const ProfileDetail = ({user}) => {
                                 Edit Profile
                             </button>
                         </Link>
+                        : null
+                        }
                     </div>
                     <div className="flex flex-col">
                         <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-4xl">

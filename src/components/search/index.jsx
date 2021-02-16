@@ -41,7 +41,7 @@ const Search = ({type, label, initial, setCurrent, searched, setSearched, showSe
             </div>
             </div>
             <nav className="hidden xl:flex flex-1 min-h-0 relative overflow-y-auto" aria-label="Directory">
-                <ul className={`relative z-0 ${type === 'user' ? 'divide-y divide-gray-200' : ''} `}>
+                <ul className={`relative z-0 w-full ${type === 'user' ? 'divide-y divide-gray-200' : ''} `}>
                     {searched.map((searchedItem,idx) => {
                             return  <li key={idx} onClick={() => {setCurrent(searchedItem); }}>
                                     {type ==='project' ? <CardProjectMini project={searchedItem} /> : <CardUserMini user={searchedItem} />}
