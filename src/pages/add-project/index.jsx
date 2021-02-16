@@ -273,7 +273,6 @@ const AddProject = (props) => {
                                         await wait(1000);
                                         try {
                                             if(images[i].isPhysicalFile){
-                                                console.log('uploading', images[i])
                                                 const imageResponse = await uploadProjectImagesToS3(images[i].image);
                                                 s3ImgUrls.push(imageResponse.location);
                                             }
@@ -285,23 +284,21 @@ const AddProject = (props) => {
 
 
                                 try {
-                                    console.log('s3urls before', s3ImgUrls);
 
                                     if(images && imagesNeedUpdate){
                                         await getS3URLs();
                                     }
                                     const currentDateTime = new Date().toISOString();
-                                    console.log('s3urls after', s3ImgUrls);
                                     newProject = {...values, technologies:_technologies, images: s3ImgUrls, user_id: {link: id}, createDate: currentDateTime}
                                     
                                     if(!projectData){
+                                        console.log(values.name)
                                         let createProjectResponse = await createProject({
                                             variables: {
                                                 project: newProject,
                                             }
                                         });
                                         const createdProjectID = createProjectResponse.data.insertOneProject._id;
-                                        setProjectName(values.name);
     
                                         let projectsArray = [];
                                         data.user.projects.forEach(project => projectsArray.push(project._id))
@@ -315,6 +312,8 @@ const AddProject = (props) => {
                                                 }
                                             }
                                         });
+                                        setProjectName(values.name);
+
                                     }
                                     else{
                                         const updateResponse = await updateProject({
@@ -331,7 +330,6 @@ const AddProject = (props) => {
                                                 }
                                             }
                                         });
-                                        console.log(updateResponse)
                                         setProjectName(updateResponse.data.updateOneProject.name);
 
                                     }
@@ -339,7 +337,6 @@ const AddProject = (props) => {
                                         resetForm();
                                         setImages([]);
                                         setImagesError([]);
-                                        setProjectName('');
                                     }
                                     setSuccess(true);
                                 } catch (error) {
@@ -360,7 +357,7 @@ const AddProject = (props) => {
                                                     {projectData ? 'Edit Project' : 'Add Project'}
                                                 </h3>
                                                 <p className="mt-1 max-w-2xl text-sm text-gray-500">
-                                                    {projectData ? '' : 'Please tell us a bit more about yourself.'}
+                                                    {projectData ? '' : 'Please tell us a bit more about your project.'}
                                                 </p>
                                             </div>
                                             <div className="mt-6 sm:mt-5 space-y-6 sm:space-y-5">

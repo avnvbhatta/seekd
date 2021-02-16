@@ -8,16 +8,18 @@ import Notification from  "../../ui/Notification";
 
 const ManageProjects = () => {
 
-    const {user} = useContext(Context);
+    const {user, setUser} = useContext(Context);
     const app = useRealmApp();
     const id = app.currentUser.id;
 
+    const [currentUser, setCurrentUser] = useState(user);
     const [showDeleteAlert, setShowDeleteAlert] = useState(false);
     const [deletingStatus, setDeletingStatus] = useState(false);
     const [deleteSuccess, setDeleteSuccess] = useState(false);
     const [deleteError, setDeleteError] = useState(false);
     const [updateUserProjectArray] = useMutation(mutations.UPDATE_USER_PROJECT_ARRAY);
     const [deleteUserProject] = useMutation(mutations.DELETE_PROJECT);
+
 
     const deleteProject = async (project_id) => {
         setDeletingStatus(true)
@@ -40,7 +42,9 @@ const ManageProjects = () => {
                 }
               });
               setDeleteSuccess(true);
-              console.log(updateUserProjectArrayResponse)
+              let temp = currentUser.projects.filter(project => project._id !== project_id);
+              setCurrentUser(user => ({...user, projects: temp}));
+              setUser(user => ({...user, projects: temp}))
 
         }
         catch(err){
@@ -54,14 +58,16 @@ const ManageProjects = () => {
       }
     
       useEffect(() => {
-        console.log('rendered')
-        console.log('success', deleteSuccess)
-        console.log('err', deleteError)
       }, [deleteSuccess, deleteError])
 
-    useEffect(() => {
+      useEffect(() => {
+          if(user){
+              setCurrentUser(user);
+          }
 
-    }, [user])
+      }, [user])
+
+ 
 
     return ( 
     <div className="overflow-y-auto px-8 py-4">
@@ -82,7 +88,7 @@ const ManageProjects = () => {
                                     manage={true} 
                                     project={project} 
                                     key={idx} 
-                                    user={user} 
+                                    user={currentUser} 
                                     showDeleteAlert={showDeleteAlert}
                                     setShowDeleteAlert={setShowDeleteAlert}
                                     deleteProject={deleteProject}

@@ -34,9 +34,9 @@ const Projects = () => {
                      projects && 
                     <Search type="project" label="Projects" initial={projects} setCurrent={setCurrentProject} searched={searchedProjects} setSearched={setSearchedProjects} showSearchResults={showSearchResults} setShowSearchResults={setShowSearchResults}/>
                 }
-                {!showSearchResults && <div className="lg:hidden text-center flex flex-col items-center text-md" onClick={() => setShowSearchResults(!showSearchResults)}>
-                    <p>View All Projects</p>
-                    <svg className="w-5 h-5 text-blue-500 text-center" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                {!showSearchResults && <div className="lg:hidden text-center flex flex-col items-center text-md " >
+                    <p className="cursor-pointer" onClick={() => setShowSearchResults(!showSearchResults)}>View All Projects</p>
+                    <svg className="w-5 h-5 text-blue-500 text-center cursor-pointer" xmlns="http://www.w3.org/2000/svg" onClick={() => setShowSearchResults(!showSearchResults)} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
                 </div>}
