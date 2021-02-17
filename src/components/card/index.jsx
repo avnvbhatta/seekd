@@ -80,14 +80,14 @@ const Card = ({user, project, manage, deleteProject, deletingStatus, showDeleteA
         {manage && 
           <>
             <span className=" z-0 flex shadow-sm rounded-md mt-6">
-              <Link to={{pathname: `/manage-projects/${project.name}`, state: project}}  className="flex justify-center flex-grow flex-1  items-center px-4 py-3 rounded-l-md border border-blue-500 bg-blue-500 text-sm font-medium text-white hover:bg-blue-700 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500">
+              <Link to={{pathname: `/manage-projects/${project.name}`, state: project}}  className="flex justify-center flex-grow flex-1  items-center px-4 py-3 rounded-l-md border border-blue-500 bg-blue-500 text-sm font-medium text-white hover:bg-blue-700 focus:z-10 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500">
                 Edit
                 <svg className="w-5 h-5 text-white ml-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
               </svg>
               </Link>
             
-              <button type="button" onClick={() => setShowDeleteAlert(true)} className="flex justify-center flex-grow flex-1   items-center px-4 py-3 rounded-r-md border border-red-500 bg-red-500 text-sm font-medium text-white hover:bg-red-700 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500">
+              <button type="button" onClick={() => setShowDeleteAlert(true)} className="flex justify-center flex-grow flex-1   items-center px-4 py-3 rounded-r-md border border-red-500 bg-red-500 text-sm font-medium text-white hover:bg-red-700 focus:z-10 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500">
                 Delete
                 <svg className="w-5 h-5 text-white ml-2"  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />

@@ -60,7 +60,7 @@ const ProjectDetail = ({project}) => {
                         <div className="flex flex-wrap mt-4">
                             {
                                 project.technologies.map((technology, idx) => {
-                                    return <div key={idx} className="mr-2 mb-2 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    return <div key={idx} className="mr-2 mb-2 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                             {technology}
                                         </div>
                                 })
@@ -68,12 +68,12 @@ const ProjectDetail = ({project}) => {
                         </div>
                         <div className="flex flex-wrap mt-4">
                             {project.url && project.url.length > 0 &&
-                                <a href={`${project.url}`} target="_blank" className="w-full flex-grow mb-2 md:mb-0 md:w-auto md:mr-2 flex justify-center py-4 px-6 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                <a href={`${project.url}`} target="_blank" className="w-full flex-grow mb-2 md:mb-0 md:w-auto md:mr-2 flex justify-center py-4 px-6 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                     View Demo
                                 </a>
                             }
                             {project.repository_url && project.repository_url.length > 0 &&
-                                <a href={`${project.repository_url}`} target="_blank" className="w-full flex-grow mb-2 md:mb-0 md:w-auto md:mr-2 flex justify-center py-4 px-6 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                <a href={`${project.repository_url}`} target="_blank" className="w-full flex-grow mb-2 md:mb-0 md:w-auto md:mr-2 flex justify-center py-4 px-6 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                     View Code
                                 </a>
                             }

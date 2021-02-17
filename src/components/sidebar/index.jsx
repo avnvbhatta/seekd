@@ -3,6 +3,8 @@ import { useRealmApp } from "../../RealmApp"
 import { Context } from "../../contexts";
 import { Link } from 'react-router-dom';
 import Avatar from "../../ui/Avatar";
+import AppBadge from "../../assets/logos/seekd-badge.svg";
+import AppBadgeFull from "../../assets/logos/seekd-full.svg";
 
 const Sidebar = () => {
     const app = useRealmApp();
@@ -92,7 +94,7 @@ const Sidebar = () => {
             <div className="lg:hidden ">
                 <div className="flex items-center justify-between bg-gray-50 border-b border-gray-200 px-4 py-1.5">
                 <div>
-                    <img className="h-8 w-auto" src="https://tailwindui.com/img/logos/workflow-mark-pink-500.svg" alt="Workflow" />
+                    <img className="h-8 w-auto" src={AppBadge} alt="Seekd" />
                 </div>
                 <div>
                     <button type="button" 
@@ -125,7 +127,7 @@ const Sidebar = () => {
                             </div>
                             <div className="flex-1 h-0 pt-5 pb-4 overflow-y-auto">
                             <div className="flex-shrink-0 flex items-center px-4">
-                                <img className="h-8 w-auto" src="https://tailwindui.com/img/logos/workflow-logo-pink-500-mark-gray-900-text.svg" alt="Workflow" />
+                                <img className="h-8 w-auto" src={AppBadgeFull} alt="Seekd" />
                             </div>
                             <Nav />
                             </div>
@@ -169,7 +171,7 @@ const Sidebar = () => {
             <div className="flex flex-col h-0 flex-1 border-r border-gray-200 bg-gray-100">
                 <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
                 <div className="flex items-center flex-shrink-0 px-4">
-                    <img className="h-8 w-auto" src="https://tailwindui.com/img/logos/workflow-logo-pink-500-mark-gray-900-text.svg" alt="Workflow"/>
+                    <img className="h-12 w-auto" src={AppBadgeFull} alt="Seekd"/>
                 </div>
                 <Nav />
                 </div>

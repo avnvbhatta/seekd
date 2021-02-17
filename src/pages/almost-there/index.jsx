@@ -205,14 +205,14 @@ const AlmostThere = (props) => {
                             name={props.name}
                             {...field} {...props}
                             className={`max-w-lg block w-full shadow-sm  sm:text-sm rounded-md  
-                            ${meta.touched && meta.error ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500' } `}/>
+                            ${meta.touched && meta.error ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500' } `}/>
                         :
                         <textarea 
                             type="text"
                             name={props.name}
                             {...field} {...props}
                             rows="6" 
-                            className={`max-w-lg sm:text-sm shadow-sm block w-full rounded-md ${meta.touched && meta.error ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500' } `}>
+                            className={`max-w-lg sm:text-sm shadow-sm block w-full rounded-md ${meta.touched && meta.error ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500' } `}>
                             </textarea>
                                         
                     }
@@ -239,7 +239,7 @@ const AlmostThere = (props) => {
                         name={props.name}
                         {...field} {...props}
                         className={`max-w-lg block w-full shadow-sm  sm:text-sm rounded-md  
-                        ${meta.touched && meta.error ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500' } `}/>
+                        ${meta.touched && meta.error ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500' } `}/>
                     <div className="text-sm text-red-500 mt-1">{meta.error}</div>
                 </div>
             </div>
@@ -261,7 +261,7 @@ const AlmostThere = (props) => {
                             autoComplete="country" 
                             {...field} {...props}
                             className={`max-w-lg block w-full shadow-sm  sm:text-sm rounded-md  
-                            ${meta.touched && meta.error ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500' } `}>
+                            ${meta.touched && meta.error ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500' } `}>
                                 <option value="">Select a country</option>
                                 {countryList.map((country,idx) => <option key={idx} value={country}>{country}</option>)}
                         </select>
@@ -312,7 +312,7 @@ const AlmostThere = (props) => {
                             </span>
                             
                         }
-                        <label className="ml-5 cursor-pointer bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        <label className="ml-5 cursor-pointer bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                             <span>Change</span>
                                 <input id="profile-pic-upload" name="profile-pic-upload" type="file" className="sr-only" onChange={e => handleImageUpload(e, 'profile')}/>
                         </label>
@@ -343,7 +343,7 @@ const AlmostThere = (props) => {
                         
                             {coverPic ? 
                             <div className="flex items-center mt-4">
-                                <label className="cursor-pointer bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                <label className="cursor-pointer bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                     <span>Change</span>
                                         <input id="cover-pic-upload" name="cover-pic-upload" type="file" className="sr-only" onChange={e => handleImageUpload(e, 'cover')}/>
                                 </label>
@@ -357,7 +357,7 @@ const AlmostThere = (props) => {
                                             <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                         </svg>
                                         <div className="flex text-sm text-gray-600">
-                                        <label htmlFor="cover-pic-upload" className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                        <label htmlFor="cover-pic-upload" className="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
                                             {coverPic ? null : <span>Upload a file</span>}
                                             <input id="cover-pic-upload" name="cover-pic-upload" type="file" className="sr-only" onChange={e => handleImageUpload(e, 'cover')} />
                                         </label>
@@ -404,7 +404,7 @@ const AlmostThere = (props) => {
             :
         
             <div className="min-h-screen bg-gray-50 flex flex-col pb-12 sm:px-6 lg:px-8 relative overflow-y-auto">
-                {userData ? null : <button type="button" onClick={() => logOut()} className="absolute inset y-0 right-0 cursor-pointer inline-flex items-center px-4 py-2 m-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                {userData ? null : <button type="button" onClick={() => logOut()} className="absolute inset y-0 right-0 cursor-pointer inline-flex items-center px-4 py-2 m-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                     Sign Out
                 </button>}
                 
@@ -518,11 +518,11 @@ const AlmostThere = (props) => {
                                                 }
                                             </span>
                                             <div className="flex justify-end">
-                                                <button type="submit" className="w-20 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                <button type="submit" className="w-20 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                                     {formik.isSubmitting ? <LoadingSpinner color="white"/> : 'Save'}
                                                 </button>
                                                 <Link to="/profile">
-                                                    <button type="button" className="ml-3 bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                    <button type="button" className="ml-3 bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                                         Cancel
                                                     </button>
                                                 </Link> 
