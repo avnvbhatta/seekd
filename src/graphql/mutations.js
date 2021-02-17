@@ -80,4 +80,20 @@ mutation UpdateUserProjectsArray($input: UpdateUserProjectsArrayInput!) {
   }
 }
 `;
-export default {CREATE_USER, CREATE_USER_PROFILE, CREATE_PROJECT, UPDATE_USER_ADD_PROJECT, UPDATE_PROJECT, DELETE_PROJECT, UPDATE_USER_PROJECT_ARRAY}
+
+const DELETE_MANY_PROJECTS =  gql`
+mutation DeleteManyProjects($query: ProjectQueryInput!){
+  deleteManyProjects(query: $query){
+    deletedCount
+  }
+}
+`;
+
+const DELETE_USER =  gql`
+mutation DeleteOneUser($query: UserQueryInput!){
+  deleteOneUser(query: $query){
+    _id
+  }
+}
+`;
+export default {CREATE_USER, CREATE_USER_PROFILE, CREATE_PROJECT, UPDATE_USER_ADD_PROJECT, UPDATE_PROJECT, DELETE_PROJECT, UPDATE_USER_PROJECT_ARRAY, DELETE_MANY_PROJECTS, DELETE_USER}

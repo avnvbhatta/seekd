@@ -250,3 +250,19 @@ export const countryList = [
 	"Zimbabwe",
 	"Åland Islands"
 ];
+
+export const s3ConfigProjects = {
+	bucketName: process.env.REACT_APP_S3_BUCKET,
+	dirName: process.env.REACT_APP_S3_PROJECTS_DIRECTORY, 
+	region: process.env.REACT_APP_S3_REGION,
+	accessKeyId: process.env.REACT_APP_S3_ACCESS_ID,
+	secretAccessKey: process.env.REACT_APP_S3_ACCESS_SECRET_KEY,
+}
+
+export const s3ConfigUsers = {
+	bucketName: process.env.REACT_APP_S3_BUCKET,
+	dirName: process.env.REACT_APP_S3_USERS_DIRECTORY, 
+	region: process.env.REACT_APP_S3_REGION,
+	accessKeyId: process.env.REACT_APP_S3_ACCESS_ID,
+	secretAccessKey: process.env.REACT_APP_S3_ACCESS_SECRET_KEY,
+}

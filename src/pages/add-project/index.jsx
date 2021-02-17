@@ -10,7 +10,7 @@ import S3 from 'aws-s3';
 import queries from "../../graphql/queries";
 import Notification from "../../ui/Notification"
 import { Link } from 'react-router-dom';
-import {urlRegex} from "../../constants";
+import {urlRegex, s3ConfigProjects} from "../../constants";
 import uniquid from "uniqid";
 
 
@@ -37,14 +37,8 @@ const AddProject = (props) => {
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
 
-    const config = {
-        bucketName: process.env.REACT_APP_S3_BUCKET,
-        dirName: process.env.REACT_APP_S3_PROJECTS_DIRECTORY, 
-        region: process.env.REACT_APP_S3_REGION,
-        accessKeyId: process.env.REACT_APP_S3_ACCESS_ID,
-        secretAccessKey: process.env.REACT_APP_S3_ACCESS_SECRET_KEY,
-    }
-    const S3Client = new S3(config);
+    
+    const S3Client = new S3(s3ConfigProjects);
 
     
     const _initialValues =  {
@@ -292,7 +286,6 @@ const AddProject = (props) => {
                                     newProject = {...values, technologies:_technologies, images: s3ImgUrls, user_id: {link: id}, createDate: currentDateTime}
                                     
                                     if(!projectData){
-                                        console.log(values.name)
                                         let createProjectResponse = await createProject({
                                             variables: {
                                                 project: newProject,
@@ -301,7 +294,9 @@ const AddProject = (props) => {
                                         const createdProjectID = createProjectResponse.data.insertOneProject._id;
     
                                         let projectsArray = [];
-                                        data.user.projects.forEach(project => projectsArray.push(project._id))
+                                        if(data.user && data.user.projects){
+                                            data.user.projects.forEach(project => projectsArray.push(project._id))
+                                        }
                                         const updateResponse = await updateUserAddProject({
                                             variables: {
                                                 query: { _id: id },
