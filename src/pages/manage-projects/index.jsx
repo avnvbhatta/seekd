@@ -78,11 +78,8 @@ const ManageProjects = () => {
         {
             user && user.projects && user.projects.length > 0 ? 
             <>
-                <p className="mt-2 text-xl text-gray-900">
-                    Click on a project to edit.
-                </p>
                 <div className="max-w-7xl mx-auto">
-                    <div className="mt-12 max-w-lg mx-auto grid gap-5 lg:grid-cols-3 lg:max-w-none relative">
+                    <div className="my-12 max-w-lg mx-auto grid gap-5 lg:grid-cols-3 lg:max-w-none relative">
                         {user.projects.map((project, idx) => {
                             return <Card 
                                     manage={true} 

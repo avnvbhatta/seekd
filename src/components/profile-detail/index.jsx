@@ -17,14 +17,14 @@ const ProfileDetail = ({user}) => {
                     : 
                     <div className="bg-gradient-to-r from-blue-500 to-purple-500 w-full h-60"></div>}
                 </div>
-                <div className="bottom-32 relative mx-8 rounded-lg px-4 py-16 lg:px-8 ">
+                <div className="bottom-32 relative md:mx-8 rounded-lg px-4 py-16 lg:px-8 ">
                 <div className="flex flex-col justify-items-start">
                     <div className="flex justify-between items-end">
-                        {user && user.img_url ? <img className="h-36 w-36 rounded-full ring-8 ring-white sm:h-36 sm:w-36" src={user.img_url} alt=""/> : <Avatar size={36}/>  }
+                        {user && user.img_url ? <img className="h-28 w-28 rounded-full ring-8 ring-white md:h-36 md:w-36" src={user.img_url} alt=""/> : <Avatar size={28}/>  }
                         { user._id === id?
                             <Link to={{pathname: 'edit-profile', state: user}}>
-                            <button type="button" class="inline-flex items-center h-10 px-6 py-3 border border-transparent shadow-sm text-base font-medium rounded-md text-white bg-blue-500 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                <svg  class="-ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <button type="button" className="inline-flex items-center h-10 px-3 md:px-6 py-3 border border-transparent shadow-sm text-base font-medium rounded-md text-white bg-blue-500 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                <svg  className="-ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                 </svg>
                                 Edit Profile
@@ -76,7 +76,7 @@ const ProfileDetail = ({user}) => {
                             <span className="text-blue-500 xl:inline">Projects</span>
                         </h1>
                         <div className="max-w-7xl mx-auto">
-                            <div className="mt-12 max-w-lg mx-auto grid gap-5 lg:grid-cols-3 lg:max-w-none">
+                            <div className="mt-6 max-w-lg mx-auto grid gap-5 lg:grid-cols-3 lg:max-w-none">
                                 {user.projects.map((project, idx) => {
                                     return <Card project={project} key={idx} user={user}/>
                                 })}
