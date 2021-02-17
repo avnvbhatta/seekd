@@ -64,4 +64,36 @@ const UPDATE_PROJECT = gql`
     }
   }
 `;
-export default {CREATE_USER, CREATE_USER_PROFILE, CREATE_PROJECT, UPDATE_USER_ADD_PROJECT, UPDATE_PROJECT}
+
+const DELETE_PROJECT = gql`
+mutation DeleteOneProject($query: ProjectQueryInput!) {
+  deleteOneProject(query: $query){
+    _id
+  }
+}
+`;
+
+const UPDATE_USER_PROJECT_ARRAY = gql`
+mutation UpdateUserProjectsArray($input: UpdateUserProjectsArrayInput!) {
+  updateUserProjectsArray(input: $input){
+    _id
+  }
+}
+`;
+
+const DELETE_MANY_PROJECTS =  gql`
+mutation DeleteManyProjects($query: ProjectQueryInput!){
+  deleteManyProjects(query: $query){
+    deletedCount
+  }
+}
+`;
+
+const DELETE_USER =  gql`
+mutation DeleteOneUser($query: UserQueryInput!){
+  deleteOneUser(query: $query){
+    _id
+  }
+}
+`;
+export default {CREATE_USER, CREATE_USER_PROFILE, CREATE_PROJECT, UPDATE_USER_ADD_PROJECT, UPDATE_PROJECT, DELETE_PROJECT, UPDATE_USER_PROJECT_ARRAY, DELETE_MANY_PROJECTS, DELETE_USER}

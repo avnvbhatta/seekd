@@ -1,13 +1,9 @@
 import { useQuery } from '@apollo/client';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import MyCarousel from '../../components/carousel';
-import FeaturedCard from '../../components/featured-card';
 import LoadingSpinner from '../../components/loadingspinner';
 import ProjectDetail from '../../components/project-detail';
 import queries from '../../graphql/queries';
-import Avatar from '../../ui/Avatar';
-import {getRandomGradient} from "../../utils/"
 
 const Project = ({project}) => {
 

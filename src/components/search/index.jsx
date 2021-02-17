@@ -50,7 +50,7 @@ const Search = ({type, label, initial, setCurrent, searched, setSearched, showSe
                 </ul>
             </nav>
             {showSearchResults && 
-            <nav className="flex flex-col shadow-lg xl:hidden  relative z-20 w-full  bg-gray-50 rounded-md px-6 pb-4 " aria-label="Directory">
+            <nav className="flex flex-col shadow-lg xl:hidden  relative z-20 w-full  bg-gray-50 rounded-2xl px-6 pb-4 " aria-label="Directory">
                 
                 <ul className={`relative z-0 w-full ${type === 'user' ? 'divide-y divide-gray-200' : ''} overflow-y-auto`}>
                     {searched.map((searchedItem,idx) => {
@@ -59,11 +59,11 @@ const Search = ({type, label, initial, setCurrent, searched, setSearched, showSe
                                 </li>
                     })}
                 </ul>
-                <div className="lg:hidden text-center flex flex-col items-center text-md" onClick={() => setShowSearchResults(!showSearchResults)}>
-                    <svg className="w-5 h-5 text-blue-500 text-center" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div className="lg:hidden text-center flex flex-col items-center text-md" >
+                    <svg className="w-5 h-5 text-blue-500 text-center cursor-pointer" onClick={() => setShowSearchResults(!showSearchResults)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
                     </svg>
-                    <p>Hide </p>
+                    <p className="cursor-pointer" onClick={() => setShowSearchResults(!showSearchResults)}>Hide </p>
 
                 </div>
             </nav>}

@@ -1,15 +1,73 @@
-import React, { useContext, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from 'react';
 import Card from '../../components/card';
 import { Context } from '../../contexts';
+import mutations from "../../graphql/mutations";
+import { useMutation } from '@apollo/client';
+import { useRealmApp } from "../../RealmApp";
+import Notification from  "../../ui/Notification";
 
 const ManageProjects = () => {
 
-    const {user} = useContext(Context);
+    const {user, setUser} = useContext(Context);
+    const app = useRealmApp();
+    const id = app.currentUser.id;
 
-    useEffect(() => {
+    const [currentUser, setCurrentUser] = useState(user);
+    const [showDeleteAlert, setShowDeleteAlert] = useState(false);
+    const [deletingStatus, setDeletingStatus] = useState(false);
+    const [deleteSuccess, setDeleteSuccess] = useState(false);
+    const [deleteError, setDeleteError] = useState(false);
+    const [updateUserProjectArray] = useMutation(mutations.UPDATE_USER_PROJECT_ARRAY);
+    const [deleteUserProject] = useMutation(mutations.DELETE_PROJECT);
 
-    }, [user])
+
+    const deleteProject = async (project_id) => {
+        setDeletingStatus(true)
+        try{
+            const deleteUserProjectResponse = await deleteUserProject({
+                variables: {
+                  query: {
+                    _id: project_id
+                  }
+                }
+              });
+
+
+            const updateUserProjectArrayResponse = await updateUserProjectArray({
+                variables: {
+                  input: {
+                    project_id: project_id,
+                    user_id: id
+                  }
+                }
+              });
+              setDeleteSuccess(true);
+              let temp = currentUser.projects.filter(project => project._id !== project_id);
+              setCurrentUser(user => ({...user, projects: temp}));
+              setUser(user => ({...user, projects: temp}))
+
+        }
+        catch(err){
+            console.log(err);
+            setDeleteError(true);
+
+        }
+        setDeletingStatus(false);
+        setShowDeleteAlert(false);
+
+      }
+    
+      useEffect(() => {
+      }, [deleteSuccess, deleteError])
+
+      useEffect(() => {
+          if(user){
+              setCurrentUser(user);
+          }
+
+      }, [user])
+
+ 
 
     return ( 
     <div className="overflow-y-auto px-8 py-4">
@@ -20,13 +78,20 @@ const ManageProjects = () => {
         {
             user && user.projects && user.projects.length > 0 ? 
             <>
-                <p className="mt-2 text-xl text-gray-900">
-                    Click on a project to edit.
-                </p>
                 <div className="max-w-7xl mx-auto">
-                    <div className="mt-12 max-w-lg mx-auto grid gap-5 lg:grid-cols-3 lg:max-w-none relative">
+                    <div className="my-12 max-w-lg mx-auto grid gap-5 lg:grid-cols-3 lg:max-w-none relative">
                         {user.projects.map((project, idx) => {
-                            return <Card manage={true} project={project} key={idx} user={user}/>
+                            return <Card 
+                                    manage={true} 
+                                    project={project} 
+                                    key={idx} 
+                                    user={currentUser} 
+                                    showDeleteAlert={showDeleteAlert}
+                                    setShowDeleteAlert={setShowDeleteAlert}
+                                    deleteProject={deleteProject}
+                                    deletingStatus={deletingStatus}
+                                    
+                                />
                         })}
                     </div>
                 </div>
@@ -43,8 +108,13 @@ const ManageProjects = () => {
                 </p>   
             </div>
         }
+
+            {deleteSuccess  && <Notification title="Successfully deleted project." type="success" ></Notification>}
+            {deleteError  && <Notification title="Something went wrong." body="Please try again later." type="error" ></Notification>}
         
-    
+        
+        
+        
     </div>
     );
 }

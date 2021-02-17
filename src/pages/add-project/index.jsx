@@ -10,7 +10,7 @@ import S3 from 'aws-s3';
 import queries from "../../graphql/queries";
 import Notification from "../../ui/Notification"
 import { Link } from 'react-router-dom';
-import {urlRegex} from "../../constants";
+import {urlRegex, s3ConfigProjects} from "../../constants";
 import uniquid from "uniqid";
 
 
@@ -37,14 +37,8 @@ const AddProject = (props) => {
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
 
-    const config = {
-        bucketName: process.env.REACT_APP_S3_BUCKET,
-        dirName: process.env.REACT_APP_S3_PROJECTS_DIRECTORY, 
-        region: process.env.REACT_APP_S3_REGION,
-        accessKeyId: process.env.REACT_APP_S3_ACCESS_ID,
-        secretAccessKey: process.env.REACT_APP_S3_ACCESS_SECRET_KEY,
-    }
-    const S3Client = new S3(config);
+    
+    const S3Client = new S3(s3ConfigProjects);
 
     
     const _initialValues =  {
@@ -273,7 +267,6 @@ const AddProject = (props) => {
                                         await wait(1000);
                                         try {
                                             if(images[i].isPhysicalFile){
-                                                console.log('uploading', images[i])
                                                 const imageResponse = await uploadProjectImagesToS3(images[i].image);
                                                 s3ImgUrls.push(imageResponse.location);
                                             }
@@ -285,13 +278,11 @@ const AddProject = (props) => {
 
 
                                 try {
-                                    console.log('s3urls before', s3ImgUrls);
 
                                     if(images && imagesNeedUpdate){
                                         await getS3URLs();
                                     }
                                     const currentDateTime = new Date().toISOString();
-                                    console.log('s3urls after', s3ImgUrls);
                                     newProject = {...values, technologies:_technologies, images: s3ImgUrls, user_id: {link: id}, createDate: currentDateTime}
                                     
                                     if(!projectData){
@@ -301,10 +292,11 @@ const AddProject = (props) => {
                                             }
                                         });
                                         const createdProjectID = createProjectResponse.data.insertOneProject._id;
-                                        setProjectName(values.name);
     
                                         let projectsArray = [];
-                                        data.user.projects.forEach(project => projectsArray.push(project._id))
+                                        if(data.user && data.user.projects){
+                                            data.user.projects.forEach(project => projectsArray.push(project._id))
+                                        }
                                         const updateResponse = await updateUserAddProject({
                                             variables: {
                                                 query: { _id: id },
@@ -315,6 +307,8 @@ const AddProject = (props) => {
                                                 }
                                             }
                                         });
+                                        setProjectName(values.name);
+
                                     }
                                     else{
                                         const updateResponse = await updateProject({
@@ -331,7 +325,6 @@ const AddProject = (props) => {
                                                 }
                                             }
                                         });
-                                        console.log(updateResponse)
                                         setProjectName(updateResponse.data.updateOneProject.name);
 
                                     }
@@ -339,7 +332,6 @@ const AddProject = (props) => {
                                         resetForm();
                                         setImages([]);
                                         setImagesError([]);
-                                        setProjectName('');
                                     }
                                     setSuccess(true);
                                 } catch (error) {
@@ -360,7 +352,7 @@ const AddProject = (props) => {
                                                     {projectData ? 'Edit Project' : 'Add Project'}
                                                 </h3>
                                                 <p className="mt-1 max-w-2xl text-sm text-gray-500">
-                                                    {projectData ? '' : 'Please tell us a bit more about yourself.'}
+                                                    {projectData ? '' : 'Please tell us a bit more about your project.'}
                                                 </p>
                                             </div>
                                             <div className="mt-6 sm:mt-5 space-y-6 sm:space-y-5">

@@ -3,7 +3,7 @@ import { useRealmApp } from "../../RealmApp"
 import { Formik, Form, useField } from 'formik';
 import * as Yup from "yup";
 import S3 from 'aws-s3';
-import {countryList, urlRegex} from "../../constants"
+import {countryList, urlRegex, s3ConfigProjects, s3ConfigUsers} from "../../constants"
 import LoadingSpinner from '../../components/loadingspinner';
 import Home from "../home"
 import Alert from '../../ui/Alert';
@@ -15,6 +15,7 @@ import MainApp from '../../components/main-app';
 import { Context } from '../../contexts';
 import Notification from '../../ui/Notification';
 import { Link } from 'react-router-dom';
+import Delete from '../../components/delete';
 
 
 const AlmostThere = (props) => {
@@ -26,14 +27,8 @@ const AlmostThere = (props) => {
     const {setUser} = useContext(Context);
     const [createUser] = useMutation(mutations.CREATE_USER);
    
-    const config = {
-        bucketName: process.env.REACT_APP_S3_BUCKET,
-        dirName: process.env.REACT_APP_S3_USERS_DIRECTORY, 
-        region: process.env.REACT_APP_S3_REGION,
-        accessKeyId: process.env.REACT_APP_S3_ACCESS_ID,
-        secretAccessKey: process.env.REACT_APP_S3_ACCESS_SECRET_KEY,
-    }
-    const S3Client = new S3(config);
+    
+    const S3Client = new S3(s3ConfigUsers);
 
     const size1MB = 1024000;
 
@@ -46,6 +41,8 @@ const AlmostThere = (props) => {
     const [loading, setLoading] = useState(true);
 
     const [createUserProfile] = useMutation(mutations.CREATE_USER_PROFILE);
+    const [deleteManyProjects] = useMutation(mutations.DELETE_MANY_PROJECTS);
+    const [deleteUser] = useMutation(mutations.DELETE_USER);
 
 
     const [success, setSuccess] = useState(false);
@@ -68,8 +65,58 @@ const AlmostThere = (props) => {
     }
 
     const [userData, setUserData] = useState(props && props.location && props.location.state ? props.location.state : null)
-    const [initialValues, setInitialValues] = useState(_initialValues)
+    const [initialValues, setInitialValues] = useState(_initialValues);
 
+    const [deletingStatus, setDeletingStatus] = useState(false);
+    const [showDeleteAlert, setShowDeleteAlert] = useState(false);
+
+
+    const deleteAccount = async () => {
+        setDeletingStatus(true);
+
+        try {
+           const S3ClientForProjects = new S3(s3ConfigProjects);
+       
+           if(userData.projects && userData.projects.length > 0){
+               for(let i=0; i<userData.projects.length; i++){
+                   if(userData.projects[i] && userData.projects[i].images && userData.projects[i].images.length > 0){
+                       for(let j=0; j<userData.projects[i].images.length; j++){
+                           let image = userData.projects[i].images[j];
+                            const deleteProjectImg = await S3ClientForProjects.deleteFile(image.substring(image.indexOf('project_image')));
+                       }
+                   }
+               }
+           }
+
+           if(userData.img_url){
+            const deleteUserProfilePic = await S3Client.deleteFile(userData.img_url.substring(userData.img_url.indexOf('profile_img')));
+            }
+            if(userData.cover_url){
+                const deleteUserCoverPic = await S3Client.deleteFile(userData.cover_url.substring(userData.cover_url.indexOf('cover_img')));
+            }
+           
+            const deleteManyProjectsResponse = await deleteManyProjects({
+                variables: {
+                  query: {
+                    user_id: {
+                        _id: id
+                    }
+                  }
+                }
+            });
+            const deleteUserResponse = await deleteUser({
+                variables: {
+                  query: {
+                    _id: id
+                  }
+                }
+            });
+            setUser({});
+            logOut();
+        } catch (error) {
+            console.log(error)
+        }
+    }
   
     useEffect(() => {
         if(userData){
@@ -165,7 +212,7 @@ const AlmostThere = (props) => {
                             name={props.name}
                             {...field} {...props}
                             rows="6" 
-                            className={`max-w-lg shadow-sm block w-full rounded-md ${meta.touched && meta.error ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500' } `}>
+                            className={`max-w-lg sm:text-sm shadow-sm block w-full rounded-md ${meta.touched && meta.error ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500' } `}>
                             </textarea>
                                         
                     }
@@ -199,6 +246,7 @@ const AlmostThere = (props) => {
           </>
         );
     };
+
 
     const Country = ({ ...props }) => {
         const [field, meta] = useField(props);
@@ -338,6 +386,7 @@ const AlmostThere = (props) => {
         }
       }
    
+   
     useEffect(() => {
         
     }, [success])
@@ -358,6 +407,7 @@ const AlmostThere = (props) => {
                 {userData ? null : <button type="button" onClick={() => logOut()} className="absolute inset y-0 right-0 cursor-pointer inline-flex items-center px-4 py-2 m-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                     Sign Out
                 </button>}
+                
                 <div className="mt-8 mx-auto w-full max-w-2xl">
                     <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
                         <Formik
@@ -458,7 +508,15 @@ const AlmostThere = (props) => {
                                             </div>
                                         </div>
 
-                                        <div className="pt-5">
+                                        <div className="pt-5 flex justify-between">
+                                           
+                                            <span>
+                                                {userData && 
+                                                    <button onClick={() => setShowDeleteAlert(true)} type="button" className="bg-red-500 py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                                        Delete Account
+                                                    </button>
+                                                }
+                                            </span>
                                             <div className="flex justify-end">
                                                 <button type="submit" className="w-20 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                                     {formik.isSubmitting ? <LoadingSpinner color="white"/> : 'Save'}
@@ -470,7 +528,15 @@ const AlmostThere = (props) => {
                                                 </Link> 
                                             </div>
                                         </div>
-                                        
+                                        {userData && showDeleteAlert && 
+                                            <Delete title={`Delete Account`} 
+                                                body="Are you sure you want to delete your account? All data will be permanently deleted from our servers. This action cannot be undone." 
+                                                buttonLabel="Delete Account"
+                                                onDelete={deleteAccount}
+                                                onCancel={setShowDeleteAlert}
+                                                isDeleting={deletingStatus} 
+                                            />
+                                        }
                                         {success && userData && <Notification title="Successfully updated profile!" type="success" > <Link to={`/profile`}>Click here to view updated profile.</Link></Notification>}
                                         {error && <Notification title="Oops. Something went wrong." type="error" body={`An error occured. Please try again later.`}/>}
                                     
