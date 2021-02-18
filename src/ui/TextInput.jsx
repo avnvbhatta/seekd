@@ -23,7 +23,7 @@ export const TextInput = ({ label, setError, ...props }) => {
                 className={`appearance-none block w-full px-3 py-2 border 
                          rounded-md shadow-sm placeholder-gray-400 
                         focus:outline-none sm:text-sm
-                        ${meta.touched && meta.error ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500' }
+                        ${meta.touched && meta.error ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500' }
                       `}
                 {...field}
                 {...props}
