@@ -1,12 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Avatar from '../../ui/Avatar';
-import {getRandomGradient} from "../../utils/index";
+import moment from "moment";
 
 
 const FeaturedCard = ({project}) => {
   return (
-    <div className="relative flex flex-col lg:flex-row rounded-md  lg:rounded-l-md shadow-lg cursor-pointer mx-8">
+    <div className="relative flex flex-col lg:flex-row rounded-md  lg:rounded-l-md shadow-lg cursor-pointer ">
       
       {project.images.length > 0 ? 
           <Link to={`/projects/${project.name}`}  className="left w-full lg:w-3/5 h-48 lg:h-auto  rounded-t-md lg:rounded-r-none lg:rounded-b-none lg:rounded-l-md"
@@ -49,7 +49,7 @@ const FeaturedCard = ({project}) => {
                 </div>
               </div>
               <div className="flex text-sm leading-5 text-gray-500">
-                {project.createDate && <time dateTime={project.createDate}>{project.createDate}</time>}
+                {moment(project.createDate).fromNow()}
               </div>
             </div>
           </Link>

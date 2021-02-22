@@ -295,7 +295,6 @@ const AddProject = (props) => {
                                         for(let i=0; i<imagesToDeleteFromS3.length; i++){
                                             let image = imagesToDeleteFromS3[i];
                                             const deleteProjectImg = await S3Client.deleteFile(image.substring(image.indexOf('project_image')));
-                                            console.log(deleteProjectImg);
                                         }
                                     }
                                     const currentDateTime = new Date().toISOString();

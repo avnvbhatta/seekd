@@ -64,7 +64,7 @@ const ProfileDetail = ({user}) => {
                         <div className="flex flex-wrap mt-4">
                             {
                                 user.technologies.map((technology, idx) => {
-                                    return (technology.length > 0 && <div key={idx} className="mr-2 mb-2 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                    return (technology.length > 0 && <div key={idx} className="mr-2 mb-2 inline-flex items-center px-3 py-1 border border-transparent text-base font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                             {technology}
                                         </div>)
                                 })
