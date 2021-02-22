@@ -26,6 +26,7 @@ const AlmostThere = (props) => {
 
     const {setUser} = useContext(Context);
     const [createUser] = useMutation(mutations.CREATE_USER);
+    const [updateUser] = useMutation(mutations.UPDATE_USER);
    
     
     const S3Client = new S3(s3ConfigUsers);
@@ -39,6 +40,9 @@ const AlmostThere = (props) => {
     const [imgError, setImgError] = useState(false);
     const [coverImgError, setCoverImgError] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [deleteProfilePic, setDeleteProfilePic] = useState(false);
+    const [deleteCoverPic, setDeleteCoverPic] = useState(false);
+
 
     const [createUserProfile] = useMutation(mutations.CREATE_USER_PROFILE);
     const [deleteManyProjects] = useMutation(mutations.DELETE_MANY_PROJECTS);
@@ -70,6 +74,16 @@ const AlmostThere = (props) => {
     const [deletingStatus, setDeletingStatus] = useState(false);
     const [showDeleteAlert, setShowDeleteAlert] = useState(false);
 
+    const deleteImg = (imgType) => {
+        if(imgType === 'profile'){
+            setProfilePic(null);
+            setDeleteProfilePic(true);
+        }
+        else{
+           setCoverPic(null);
+           setDeleteCoverPic(true);
+        }
+    }
 
     const deleteAccount = async () => {
         setDeletingStatus(true);
@@ -298,7 +312,7 @@ const AlmostThere = (props) => {
                                 <img className="h-16 w-16 rounded-full overflow-hidden " src={profilePic.url}/>
                                 <div className="absolute cursor-pointer -top-3 -right-3 h-6 w-6 bg-red-500 text-white rounded-full flex justify-center items-center">
                                     <svg className="h-5 w-3"xmlns="http://www.w3.org/2000/svg" fill="none" 
-                                    onClick={() => setProfilePic(null)}
+                                    onClick={() => deleteImg('profile')}
                                     viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
                                     </svg>
@@ -333,7 +347,7 @@ const AlmostThere = (props) => {
                                 <img className="rounded-md w-full h-36 overflow-hidden" src={coverPic.url}/>
                                 <div className="absolute cursor-pointer -top-3 -right-3 h-6 w-6 bg-red-500 text-white rounded-full flex justify-center items-center">
                                     <svg className="h-5 w-3"xmlns="http://www.w3.org/2000/svg" fill="none" 
-                                    onClick={() => setCoverPic(null)}
+                                    onClick={() => deleteImg('cover')}
                                     viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
                                     </svg>
@@ -463,6 +477,15 @@ const AlmostThere = (props) => {
                                     if(coverPic && coverPicNeedsUpdate){
                                         const coverPicResponse = await uploadImageToS3(coverPic.fileName, 'cover');
                                         formData = {...formData, cover_url: coverPicResponse.location}
+                                    }
+
+                                    if(deleteProfilePic){
+                                        const deleteUserProfilePic = await S3Client.deleteFile(userData.img_url.substring(userData.img_url.indexOf('profile_img')));
+                                        formData ={...formData, img_url: ''}
+                                    }
+                                    if(deleteCoverPic){
+                                        const deleteUserCoverPic = await S3Client.deleteFile(userData.cover_url.substring(userData.cover_url.indexOf('cover_img')));
+                                        formData ={...formData, cover_url: ''}
                                     }
 
                                     const resp = await createUserProfile({

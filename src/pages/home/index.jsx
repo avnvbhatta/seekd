@@ -24,9 +24,9 @@ const Home = () => {
             <span className="text-blue-500 xl:inline">Project</span>
           </h1>
 
-          <div className="featured max-w-4xl mx-auto">
+          <div className="featured max-w-7xl mb-16 mx-8 md:mx-32 lg:mx-8 xl:mx-8 2xl:mx-auto ">
             {loadingFeatured ? <LoadingSpinner size={16} color="text-blue-500" /> : 
-                <FeaturedCard project={featuredData.project}/> 
+              <>{featuredData && <FeaturedCard project={featuredData.project}/> }</>
             }
           </div>
 

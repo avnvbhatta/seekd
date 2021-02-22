@@ -96,4 +96,36 @@ mutation DeleteOneUser($query: UserQueryInput!){
   }
 }
 `;
-export default {CREATE_USER, CREATE_USER_PROFILE, CREATE_PROJECT, UPDATE_USER_ADD_PROJECT, UPDATE_PROJECT, DELETE_PROJECT, UPDATE_USER_PROJECT_ARRAY, DELETE_MANY_PROJECTS, DELETE_USER}
+
+
+const UPDATE_USER = gql`
+  mutation UpdateUser($query: UserQueryInput!, $set: UserUpdateInput!) {
+    updateOneUser(query: $query, set: $set){
+      _id
+        bio
+        city
+        country
+        cover_url
+        employer
+        facebook
+        img_url
+        instagram
+        linkedin
+        name
+        twitter
+        website
+        technologies
+        projects {
+        _id
+        name
+        description
+        likes
+        images
+        url
+        technologies
+        repository_url
+      }
+    }
+  }
+`;
+export default {CREATE_USER, CREATE_USER_PROFILE, CREATE_PROJECT, UPDATE_USER_ADD_PROJECT, UPDATE_PROJECT, DELETE_PROJECT, UPDATE_USER_PROJECT_ARRAY, DELETE_MANY_PROJECTS, DELETE_USER, UPDATE_USER}
