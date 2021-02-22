@@ -33,6 +33,7 @@ const AddProject = (props) => {
     const [projectName, setProjectName] = useState('');
     const [projectDataLoading, setProjectDataLoading] = useState(true);
     const [imagesNeedUpdate, setImagesNeedUpdate] = useState(false);
+    const [imagesToDeleteFromS3, setImagesToDeleteFromS3] = useState([]);
 
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
@@ -116,10 +117,16 @@ const AddProject = (props) => {
 
     }
 
-    const deleteImg = (fileName) => {
-        let _images = images.filter(image => image.fileName !== fileName);
+    const deleteImg = (imageToDelete) => {
+        let _images = images.filter(image => image.fileName !== imageToDelete.fileName);
         setImages(_images);
-        setImagesNeedUpdate(true)
+        setImagesNeedUpdate(true);
+        let tempImagesToDelete = [];
+        if(imageToDelete.url.includes('/projects/project_image')){
+            tempImagesToDelete.push(imageToDelete.url);   
+        }
+        setImagesToDeleteFromS3(prev => [...prev, ...tempImagesToDelete]);
+
     }
 
     const MyTextInput = ({ label, type, ...props }) => {
@@ -175,7 +182,7 @@ const AddProject = (props) => {
                                                 <img className={`rounded-md w-20 h-20 `} src={image.url}/>
                                                 <div className="absolute cursor-pointer -top-3 -right-3 h-6 w-6 bg-red-500 text-white rounded-full flex justify-center items-center">
                                                     <svg className="h-5 w-3"xmlns="http://www.w3.org/2000/svg" fill="none" 
-                                                    onClick={() => deleteImg(image.fileName)}
+                                                    onClick={() => deleteImg(image)}
                                                     viewBox="0 0 24 24" stroke="currentColor">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
                                                     </svg>
@@ -281,6 +288,15 @@ const AddProject = (props) => {
 
                                     if(images && imagesNeedUpdate){
                                         await getS3URLs();
+                                    }
+
+                                    
+                                    if(imagesToDeleteFromS3.length > 0){
+                                        for(let i=0; i<imagesToDeleteFromS3.length; i++){
+                                            let image = imagesToDeleteFromS3[i];
+                                            const deleteProjectImg = await S3Client.deleteFile(image.substring(image.indexOf('project_image')));
+                                            console.log(deleteProjectImg);
+                                        }
                                     }
                                     const currentDateTime = new Date().toISOString();
                                     newProject = {...values, technologies:_technologies, images: s3ImgUrls, user_id: {link: id}, createDate: currentDateTime}
