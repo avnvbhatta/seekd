@@ -22,7 +22,7 @@ const Gateway = ({children}) => {
     }, [data])
 
     if(loading){
-        return <LoadingSpinner color="text-blue-500" size="16"/>
+        return <div className="flex h-screen w-full justify-center items-center"><LoadingSpinner color="text-blue-500" size="16"/></div>
     }
 
     return data && data.user && data.user.name ? children : <AlmostThere />;
