@@ -29,7 +29,7 @@ const Users = () => {
             
             <div className="flex-1 relative z-0 flex overflow-hidden flex-col xl:flex-row">
             
-                { loading && <div className="mt-16 w-full"><LoadingSpinner color="text-blue-500" size="16"/></div> }
+                { loading && <div className="flex w-1/2 justify-center mt-32"><LoadingSpinner color="text-blue-500" size="16"/></div> }
                 {
                      users && 
                     <Search type="user" label="Users" initial={users} setCurrent={setCurrentUser} searched={searchedUsers} setSearched={setSearchedUsers} showSearchResults={showSearchResults} setShowSearchResults={setShowSearchResults}/>

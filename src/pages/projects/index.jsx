@@ -29,7 +29,7 @@ const Projects = () => {
             
             <div className="flex-1 relative z-0 flex overflow-hidden flex-col xl:flex-row ">
             
-                { loading && <div className="mt-16 w-full"><LoadingSpinner color="text-blue-500" size="16"/></div> }
+                { loading && <div className="flex w-1/2 justify-center mt-32"><LoadingSpinner color="text-blue-500" size="16"/></div> }
                 {
                      projects && 
                     <Search type="project" label="Projects" initial={projects} setCurrent={setCurrentProject} searched={searchedProjects} setSearched={setSearchedProjects} showSearchResults={showSearchResults} setShowSearchResults={setShowSearchResults}/>
